@@ -5,20 +5,17 @@ import Login from "./Login"
 import Register from "./Register"
 import Workout from "./Workout"
 import "bootstrap/dist/css/bootstrap.min.css"
+import Navbar from "./Navbar"
 
 function App() {
-  const handleLogout = () => {
-    localStorage.removeItem("token")
-    window.location = "/"
-  }
   return (
     <div className="App">
-      <button onClick={handleLogout}>Logout</button>
+      <Navbar />
 
       <BrowserRouter>
         <div className="pages">
           <Routes>
-            <Route path="/" element={<Login />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/workout" element={<Workout />} />
           </Routes>

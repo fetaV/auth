@@ -1,5 +1,3 @@
-// src/Workout.js
-
 import React, { useState, useEffect } from "react"
 import axios from "axios"
 
@@ -8,6 +6,12 @@ function Workout() {
   const [title, setTitle] = useState("")
   const [reps, setReps] = useState(0)
   const [load, setLoad] = useState(0)
+
+  useEffect(() => {
+    if (!localStorage.getItem("token")) {
+      window.location = "/login"
+    }
+  })
 
   useEffect(() => {
     const fetchWorkouts = async () => {

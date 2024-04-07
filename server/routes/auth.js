@@ -4,10 +4,26 @@ const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const User = require("../models/User")
 
+function validatePassword(password) {
+  if (password.length < 8) return "Password must be at least 8 characters long."
+  if (!/[A-Z]/.test(password))
+    return "Password must contain at least one uppercase letter."
+  if (!/[a-z]/.test(password))
+    return "Password must contain at least one lowercase letter."
+  if (!/[0-9]/.test(password))
+    return "Password must contain at least one digit."
+  if (!/[^A-Za-z0-9]/.test(password))
+    return "Password must contain at least one special character."
+  return null
+}
+
 // Kullanıcı kaydı
 router.post("/register", async (req, res) => {
   try {
     const { username, email, password } = req.body
+
+    const passwordError = validatePassword(password)
+
     const hashedPassword = await bcrypt.hash(password, 10)
     const existingUser = await User.findOne({ email })
 
@@ -17,7 +33,9 @@ router.post("/register", async (req, res) => {
           "This email address is already in use. Please enter another email address.",
       })
     }
-
+    if (passwordError) {
+      return res.status(400).json({ message: passwordError })
+    }
     const user = new User({
       username,
       email,

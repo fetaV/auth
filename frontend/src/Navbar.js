@@ -3,7 +3,7 @@ import React from "react"
 const Navbar = () => {
   const handleLogout = () => {
     localStorage.removeItem("token")
-    window.location = "/"
+    window.location = "/login"
   }
   const isLoggedIn = localStorage.getItem("token")
 

@@ -1,5 +1,3 @@
-// src/Register.js
-
 import React, { useState } from "react"
 import axios from "axios"
 
@@ -29,15 +27,15 @@ function Register() {
       <form onSubmit={handleSubmit}>
         <section className="vh-100 gradient-custom">
           <div className="container h-100">
-            <div className="row d-flex justify-content-center align-items-center h-100">
+            <div className="row d-flex justify-content-center align-items-center h-50">
               <div className="col-12 col-md-8 col-lg-6 col-xl-5">
                 <div
                   className="card bg-dark text-white"
                   style={{ borderRadius: "1rem" }}
                 >
                   <div className="card-body p-5 text-center">
-                    <div className="mb-md-5 mt-md-4 pb-5">
-                      <h2 className="fw-bold mb-2 text-uppercase">Login</h2>
+                    <div className="">
+                      <h2 className="fw-bold mb-2 text-uppercase">Sign Up</h2>
                       <p className="text-white-50 mb-5">
                         Please enter your login and password!
                       </p>
@@ -119,31 +117,6 @@ function Register() {
             </div>
           </div>
         </section>
-      </form>
-      <h2>Register</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={e => setUsername(e.target.value)}
-          required
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit">Register</button>
       </form>
     </div>
   )

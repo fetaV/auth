@@ -47,14 +47,14 @@ router.put("/users/:id", async (req, res) => {
   const { id } = req.params
 
   try {
-    const user = await User.findOneAndDelete({ _id: id }, { ...req.body })
+    const user = await User.findByIdAndUpdate(id, req.body, { new: true })
 
     if (!user) {
       return res.status(404).json({ message: "User not found" })
     }
 
     console.log("User updated:", user)
-    res.status(204).end()
+    res.status(200).json(user)
   } catch (error) {
     res.status(500).json({ message: error.message })
   }

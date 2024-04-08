@@ -7,6 +7,7 @@ function Table() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState(null)
+  const [editUserId, setEditUserId] = useState(null)
 
   const handleSubmit = async e => {
     e.preventDefault()
@@ -60,9 +61,30 @@ function Table() {
     }
   }
 
-  const handleEdit = userId => {
-    // Düzenleme işlemleri burada yapılabilir
-    console.log("Edit user with ID:", userId)
+  const handleEditModalOpen = userId => {
+    // Edit modal'ının açılmasını sağlar ve userId state'ine atama yapar
+    setEditUserId(userId)
+
+    // Kullanıcının bilgilerini alır
+    const userToEdit = users.find(user => user._id === userId)
+    setUsername(userToEdit.username)
+    setEmail(userToEdit.email)
+    setPassword(userToEdit.password)
+  }
+
+  const handleEdit = async userId => {
+    try {
+      const token = localStorage.getItem("token")
+      const response = await axios.put(`/api/auth/users/${userId}`, {
+        headers: {
+          Authorization: token,
+        },
+      })
+
+      console.log("User information:", response.data)
+    } catch (error) {
+      console.error(error.response.data)
+    }
   }
 
   return (
@@ -70,7 +92,7 @@ function Table() {
       <button
         className="btn btn-success mr-2"
         data-bs-toggle="modal"
-        data-bs-target="#exampleModal"
+        data-bs-target="#exampleModal1"
       >
         Add New User
       </button>
@@ -92,7 +114,9 @@ function Table() {
               <td>
                 <button
                   className="btn btn-primary"
-                  onClick={() => handleEdit(user._id)}
+                  onClick={() => handleEditModalOpen(user._id)}
+                  data-bs-toggle="modal"
+                  data-bs-target="#exampleModal2"
                 >
                   Edit
                 </button>
@@ -109,26 +133,26 @@ function Table() {
       </table>
 
       <div
-        class="modal fade"
-        id="exampleModal"
+        className="modal fade"
+        id="exampleModal2"
         tabindex="-1"
-        aria-labelledby="exampleModalLabel"
+        aria-labelledby="exampleModal2Label"
         aria-hidden="true"
       >
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-5" id="exampleModalLabel">
-                Add New User
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="exampleModal2Label">
+                Update User
               </h1>
               <button
                 type="button"
-                class="btn-close"
+                className="btn-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
               ></button>
             </div>
-            <div class="modal-body">
+            <div className="modal-body">
               <div className="form-outline form-white mb-4">
                 <label className="form-label" htmlFor="typeEmailX">
                   Username
@@ -166,22 +190,104 @@ function Table() {
                 />
               </div>
               {error && (
-                <div class="alert alert-danger" role="alert">
+                <div className="alert alert-danger" role="alert">
                   {error}
                 </div>
               )}
             </div>
-            <div class="modal-footer">
+            <div className="modal-footer">
               <button
                 type="button"
-                class="btn btn-secondary"
+                className="btn btn-secondary"
                 data-bs-dismiss="modal"
               >
                 Close
               </button>
               <button
                 type="button"
-                class="btn btn-primary"
+                className="btn btn-primary"
+                onClick={handleEdit}
+              >
+                Save changes
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="modal fade"
+        id="exampleModal1"
+        tabindex="-1"
+        aria-labelledby="exampleModal1Label"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="exampleModal1Label">
+                Add New User
+              </h1>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="modal-body">
+              <div className="form-outline form-white mb-4">
+                <label className="form-label" htmlFor="typeEmailX">
+                  Username
+                </label>
+                <input
+                  type="text"
+                  value={username}
+                  onChange={e => setUsername(e.target.value)}
+                  required
+                  className="form-control form-control-lg"
+                />
+              </div>
+              <div className="form-outline form-white mb-4">
+                <label className="form-label" htmlFor="typeEmailX">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  required
+                  className="form-control form-control-lg"
+                />
+              </div>
+              <div className="form-outline form-white mb-4">
+                <label className="form-label" htmlFor="typePasswordX">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  required
+                  className="form-control form-control-lg"
+                />
+              </div>
+              {error && (
+                <div className="alert alert-danger" role="alert">
+                  {error}
+                </div>
+              )}
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary"
                 onClick={handleSubmit}
               >
                 Save changes

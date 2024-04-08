@@ -1,11 +1,14 @@
 import React from "react"
 
 const Navbar = () => {
+  const isLoggedIn = localStorage.getItem("token")
+  const userName = localStorage.getItem("username")
+
   const handleLogout = () => {
     localStorage.removeItem("token")
+    localStorage.removeItem("username")
     window.location = "/login"
   }
-  const isLoggedIn = localStorage.getItem("token")
 
   return (
     <div>
@@ -66,13 +69,15 @@ const Navbar = () => {
                     </a>
                   </>
                 )}
-                <div
-                  data-mdb-ripple-init=""
-                  className="btn btn-dark px-3 "
-                  role="button"
-                >
-                  <i className="fab fa-github hide" />
-                </div>
+                {userName && (
+                  <div
+                    data-mdb-ripple-init=""
+                    className="btn btn-dark px-3 "
+                    role="button"
+                  >
+                    {userName}
+                  </div>
+                )}
               </div>
             </div>
           </div>

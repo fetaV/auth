@@ -11,6 +11,7 @@ function Login() {
     try {
       const response = await axios.post("/api/auth/login", { email, password })
       localStorage.setItem("token", response.data.token)
+      localStorage.setItem("username", response.data.username)
       window.location = "/workout"
     } catch (error) {
       console.error(error.response.data)

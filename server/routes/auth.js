@@ -26,6 +26,7 @@ router.get("/users", async (req, res) => {
   }
 })
 
+//Kullanıcı silme
 router.delete("/users/:id", async (req, res) => {
   const { id } = req.params
 
@@ -43,6 +44,7 @@ router.delete("/users/:id", async (req, res) => {
   }
 })
 
+// Kullanıcı düzenleme
 router.put("/users/:id", async (req, res) => {
   const { id } = req.params
 

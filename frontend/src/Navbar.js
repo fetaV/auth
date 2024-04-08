@@ -83,13 +83,12 @@ const Navbar = () => {
                   <hr className="dropdown-divider" />
                 </li>
                 <li>
-                  <a
+                  <button
                     className="dropdown-item bg-danger text-white "
                     onClick={handleLogout}
-                    href="#"
                   >
                     Logout
-                  </a>
+                  </button>
                 </li>
               </ul>
             </div>

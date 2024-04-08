@@ -171,9 +171,8 @@ function Table() {
                     type="text"
                     value={username}
                     onChange={e => setUsername(e.target.value)}
-                    required
                     className="form-control form-control-lg"
-                    require="true"
+                    required
                   />
                 </div>
                 <div className="form-outline form-white mb-4">
@@ -200,11 +199,11 @@ function Table() {
                     className="form-control form-control-lg"
                   />
                 </div>
-                {error && (
+                {/* {error && (
                   <div className="alert alert-danger" role="alert">
                     {error}
                   </div>
-                )}
+                )} */}
               </div>
               <div className="modal-footer">
                 <button
@@ -254,11 +253,11 @@ function Table() {
                     type="text"
                     value={username}
                     onChange={e => setUsername(e.target.value)}
-                    required
                     className="form-control form-control-lg"
-                    require="true"
+                    required
                   />
                 </div>
+
                 <div className="form-outline form-white mb-4">
                   <label className="form-label" htmlFor="typeEmailX">
                     Email
@@ -283,11 +282,11 @@ function Table() {
                     className="form-control form-control-lg"
                   />
                 </div>
-                {error && (
+                {/* {error && (
                   <div className="alert alert-danger" role="alert">
                     {error}
                   </div>
-                )}
+                )} */}
               </div>
               <div className="modal-footer">
                 <button

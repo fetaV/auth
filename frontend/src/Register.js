@@ -1,5 +1,7 @@
 import React, { useState } from "react"
 import axios from "axios"
+import { toast, ToastContainer } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 
 function Register() {
   const [username, setUsername] = useState("")
@@ -19,11 +21,14 @@ function Register() {
     } catch (error) {
       console.error(error.response.data)
       setError(error.response.data.message)
+      toast.error(error.response.data.message)
     }
   }
 
   return (
     <div>
+      <ToastContainer />
+
       <form onSubmit={handleSubmit}>
         <section className="vh-100 gradient-custom">
           <div className="container h-100">
@@ -47,9 +52,8 @@ function Register() {
                           type="text"
                           value={username}
                           onChange={e => setUsername(e.target.value)}
-                          required
                           className="form-control form-control-lg"
-                          require="true"
+                          required
                         />
                       </div>
                       <div className="form-outline form-white mb-4">
@@ -81,11 +85,11 @@ function Register() {
                           Forgot password?
                         </a>
                       </p>
-                      {error && (
+                      {/* {error && (
                         <div class="alert alert-danger" role="alert">
                           {error}
                         </div>
-                      )}
+                      )} */}
                       <button
                         className="btn btn-outline-light btn-lg px-5"
                         type="submit"

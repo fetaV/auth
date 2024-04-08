@@ -49,6 +49,15 @@ router.put("/users/:id", async (req, res) => {
   const { id } = req.params
 
   try {
+    // Hash the password before updating the user
+
+    if (!req.body.username) {
+      return res.status(400).json({ message: "Username is required." })
+    }
+
+    if (req.body.password) {
+      req.body.password = await bcrypt.hash(req.body.password, 10)
+    }
     const user = await User.findByIdAndUpdate(id, req.body, { new: true })
 
     if (!user) {
@@ -71,6 +80,10 @@ router.post("/register", async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10)
     const existingUser = await User.findOne({ email })
+
+    if (!username) {
+      return res.status(400).json({ message: "Username is required." })
+    }
 
     if (existingUser) {
       return res.status(400).json({

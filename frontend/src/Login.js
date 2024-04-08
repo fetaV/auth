@@ -12,6 +12,11 @@ function Login() {
       const response = await axios.post("/api/auth/login", { email, password })
       localStorage.setItem("token", response.data.token)
       localStorage.setItem("username", response.data.username)
+      if (email === "admin@admin.com") {
+        localStorage.setItem("isAdmin", true)
+      } else {
+        localStorage.removeItem("isAdmin")
+      }
       window.location = "/workout"
     } catch (error) {
       console.error(error.response.data)

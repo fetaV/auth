@@ -56,8 +56,16 @@ router.post("/login", async (req, res) => {
     if (!user) throw new Error("User not found")
     const passwordMatch = await bcrypt.compare(password, user.password)
     if (!passwordMatch) throw new Error("Wrong password, please check it!")
+
+    let isAdmin = false
+
+    if (user.email === "admin@admin.com") {
+      isAdmin = true
+      console.log("Admin user logged in")
+    }
+
     const token = jwt.sign(
-      { email: user.email, username: user.username },
+      { email: user.email, username: user.username, isAdmin },
       process.env.SECRET,
       {
         expiresIn: "1h",

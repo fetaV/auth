@@ -49,6 +49,7 @@ function Register() {
                           onChange={e => setUsername(e.target.value)}
                           required
                           className="form-control form-control-lg"
+                          require="true"
                         />
                       </div>
                       <div className="form-outline form-white mb-4">

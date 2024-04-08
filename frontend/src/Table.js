@@ -3,6 +3,25 @@ import axios from "axios"
 
 function Table() {
   const [users, setUsers] = useState([])
+  const [username, setUsername] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [error, setError] = useState(null)
+
+  const handleSubmit = async e => {
+    e.preventDefault()
+    try {
+      await axios.post("/api/auth/register", {
+        username,
+        email,
+        password,
+      })
+      window.location = "/table"
+    } catch (error) {
+      console.error(error.response.data)
+      setError(error.response.data.message)
+    }
+  }
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -13,8 +32,12 @@ function Table() {
             Authorization: token,
           },
         })
-        console.log(response)
-        setUsers(response.data)
+
+        const filteredUsers = response.data.filter(
+          user => user.username !== "admin" && user.email !== "admin@admin.com"
+        )
+
+        setUsers(filteredUsers)
       } catch (error) {
         console.error(error.response.data)
       }
@@ -96,7 +119,7 @@ function Table() {
           <div class="modal-content">
             <div class="modal-header">
               <h1 class="modal-title fs-5" id="exampleModalLabel">
-                Modal title
+                Add New User
               </h1>
               <button
                 type="button"
@@ -105,7 +128,49 @@ function Table() {
                 aria-label="Close"
               ></button>
             </div>
-            <div class="modal-body">...</div>
+            <div class="modal-body">
+              <div className="form-outline form-white mb-4">
+                <label className="form-label" htmlFor="typeEmailX">
+                  Username
+                </label>
+                <input
+                  type="text"
+                  value={username}
+                  onChange={e => setUsername(e.target.value)}
+                  required
+                  className="form-control form-control-lg"
+                />
+              </div>
+              <div className="form-outline form-white mb-4">
+                <label className="form-label" htmlFor="typeEmailX">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  required
+                  className="form-control form-control-lg"
+                />
+              </div>
+              <div className="form-outline form-white mb-4">
+                <label className="form-label" htmlFor="typePasswordX">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  required
+                  className="form-control form-control-lg"
+                />
+              </div>
+              {error && (
+                <div class="alert alert-danger" role="alert">
+                  {error}
+                </div>
+              )}
+            </div>
             <div class="modal-footer">
               <button
                 type="button"
@@ -114,7 +179,11 @@ function Table() {
               >
                 Close
               </button>
-              <button type="button" class="btn btn-primary">
+              <button
+                type="button"
+                class="btn btn-primary"
+                onClick={handleSubmit}
+              >
                 Save changes
               </button>
             </div>

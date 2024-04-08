@@ -43,6 +43,23 @@ router.delete("/users/:id", async (req, res) => {
   }
 })
 
+router.put("/users/:id", async (req, res) => {
+  const { id } = req.params
+
+  try {
+    const user = await User.findOneAndDelete({ _id: id }, { ...req.body })
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" })
+    }
+
+    console.log("User updated:", user)
+    res.status(204).end()
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+})
+
 // Kullanıcı kaydı
 router.post("/register", async (req, res) => {
   try {

@@ -6,6 +6,7 @@ import Register from "./Register"
 import Workout from "./Workout"
 import "bootstrap/dist/css/bootstrap.min.css"
 import Navbar from "./Navbar"
+import Table from "./Table"
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/workout" element={<Workout />} />
+            <Route path="/table" element={<Table />} />
           </Routes>
         </div>
       </BrowserRouter>

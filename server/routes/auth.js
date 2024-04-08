@@ -17,6 +17,32 @@ function validatePassword(password) {
   return null
 }
 
+router.get("/users", async (req, res) => {
+  try {
+    const users = await User.find({}).sort({ createdAt: -1 })
+    res.status(200).json(users)
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+})
+
+router.delete("/users/:id", async (req, res) => {
+  const { id } = req.params
+
+  try {
+    const user = await User.findOneAndDelete({ _id: id })
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" })
+    }
+
+    console.log("User deleted:", user)
+    res.status(204).end()
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+})
+
 // Kullanıcı kaydı
 router.post("/register", async (req, res) => {
   try {
@@ -61,7 +87,6 @@ router.post("/login", async (req, res) => {
 
     if (user.email === "admin@admin.com") {
       isAdmin = true
-      console.log("Admin user logged in")
     }
 
     const token = jwt.sign(

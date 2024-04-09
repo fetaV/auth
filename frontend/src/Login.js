@@ -1,5 +1,7 @@
 import React, { useState } from "react"
 import axios from "axios"
+import { toast, ToastContainer } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 
 function Login() {
   const [email, setEmail] = useState("")
@@ -21,11 +23,14 @@ function Login() {
     } catch (error) {
       console.error(error.response.data)
       setError(error.response.data.message)
+      toast.error(error.response.data.message)
     }
   }
 
   return (
     <div>
+      <ToastContainer />
+
       <form onSubmit={handleSubmit}>
         <section className="vh-100 gradient-custom">
           <div className="container h-100">
@@ -70,11 +75,11 @@ function Login() {
                           Forgot password?
                         </a>
                       </p>
-                      {error && (
+                      {/* {error && (
                         <div class="alert alert-danger" role="alert">
                           {error}
                         </div>
-                      )}
+                      )} */}
                       <button
                         className="btn btn-outline-light btn-lg px-5"
                         type="submit"

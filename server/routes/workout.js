@@ -30,6 +30,16 @@ router.get("/", verifyToken, async (req, res) => {
 router.post("/", verifyToken, async (req, res) => {
   try {
     const { title, reps, load } = req.body
+
+    // Başlığın veritabanında var olup olmadığını kontrol edin
+    const existingWorkout = await Workout.findOne({ title })
+
+    // Eğer başlık zaten varsa uygun bir hata mesajı döndürün
+    if (existingWorkout) {
+      return res.status(400).json({ message: "Title is already exist" })
+    }
+
+    // Başlık yoksa yeni workout'u oluşturun ve kaydedin
     const workout = new Workout({
       title,
       reps,
@@ -37,7 +47,39 @@ router.post("/", verifyToken, async (req, res) => {
       user: req.user.email,
     })
     await workout.save()
+
     res.status(201).json(workout)
+  } catch (err) {
+    res.status(500).send(err.message)
+  }
+})
+
+// Kullanıcı workout veri düzenlemesi
+router.put("/:id", async (req, res) => {
+  try {
+    const id = req.params.id
+    const { title } = req.body
+
+    // Düzenlenen verinin mevcut başlığını alın
+    const existingWorkout = await Workout.findById(id)
+
+    // Eğer yeni başlık mevcut başlıkla aynı değilse ve veritabanında başka bir veride kullanılıyorsa uygun bir hata mesajı döndürün
+    if (title !== existingWorkout.title) {
+      const isTitleExist = await Workout.exists({ title })
+      if (isTitleExist) {
+        return res.status(400).json({ message: "Title is already exist" })
+      }
+    }
+
+    // Düzenleme işlemini gerçekleştirin
+    const workout = await Workout.findByIdAndUpdate(id, req.body, { new: true })
+
+    if (!workout) {
+      return res.status(404).json({ message: "Workout not found" })
+    }
+
+    console.log("Workout updated:", workout)
+    res.status(200).json(workout)
   } catch (err) {
     res.status(500).send(err.message)
   }

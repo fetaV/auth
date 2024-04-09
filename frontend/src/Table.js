@@ -246,7 +246,7 @@ function Table() {
               </div>
               <div className="modal-body">
                 <div className="form-outline form-white mb-4">
-                  <label className="form-label" htmlFor="typeEmailX">
+                  <label className="form-label" htmlFor="typeNameX">
                     Username
                   </label>
                   <input

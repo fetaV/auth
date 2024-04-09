@@ -90,17 +90,16 @@ function Workout() {
     }
   }
 
-  const handleDelete = async index => {
+  const handleDelete = async userId => {
     try {
       const token = localStorage.getItem("token")
-      await axios.delete(`/api/workout/${workouts[index]._id}`, {
+      await axios.delete(`/api/workout/${userId}`, {
         headers: {
           Authorization: token,
         },
       })
-      const updatedWorkouts = [...workouts]
-      updatedWorkouts.splice(index, 1)
-      setWorkouts(updatedWorkouts)
+      setWorkouts(workouts.filter(user => user._id !== userId))
+      toast.success("Workout deleted successfully!")
     } catch (error) {
       console.error(error.response.data)
     }

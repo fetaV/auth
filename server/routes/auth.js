@@ -49,8 +49,6 @@ router.put("/users/:id", async (req, res) => {
   const { id } = req.params
 
   try {
-    // Hash the password before updating the user
-
     if (!req.body.username) {
       return res.status(400).json({ message: "Username is required." })
     }

@@ -31,7 +31,9 @@ const Navbar = () => {
           <div className="collapse navbar-collapse" id="navbarButtonsExample">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
-                <div className="nav-link">Dashboard</div>
+                <a href="/" className="nav-link">
+                  Home
+                </a>
               </li>
             </ul>
             <div className="d-flex align-items-center">

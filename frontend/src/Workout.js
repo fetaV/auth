@@ -176,7 +176,7 @@ function Workout() {
                 </div>
                 <div>
                   <button
-                    className="btn btn-warning mr-2 text-white"
+                    className="btn btn-warning me-2 text-white"
                     data-bs-toggle="modal"
                     data-bs-target="#exampleModal"
                     onClick={() => handleEditModalOpen(workout._id)}
@@ -206,7 +206,7 @@ function Workout() {
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="exampleModalLabel">
-                Modal title
+                Workout Update
               </h1>
               <button
                 type="button"

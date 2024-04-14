@@ -53,17 +53,25 @@ router.put("/users/:id", async (req, res) => {
       return res.status(400).json({ message: "Username is required." })
     }
 
-    if (req.body.password) {
-      req.body.password = await bcrypt.hash(req.body.password, 10)
-    }
-    const user = await User.findByIdAndUpdate(id, req.body, { new: true })
-
+    const user = await User.findById(id)
     if (!user) {
       return res.status(404).json({ message: "User not found" })
     }
 
-    console.log("User updated:", user)
-    res.status(200).json(user)
+    if (req.body.password) {
+      req.body.password = await bcrypt.hash(req.body.password, 10)
+    }
+    if (req.body.email) {
+      user.email = req.body.email
+    }
+    if (req.body.username) {
+      user.username = req.body.username
+    }
+
+    const updatedUser = await user.save()
+
+    console.log("User updated:", updatedUser)
+    res.status(200).json(updatedUser)
   } catch (error) {
     res.status(500).json({ message: error.message })
   }

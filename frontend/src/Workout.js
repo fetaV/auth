@@ -184,7 +184,7 @@ function Workout() {
                   </button>
                   <button
                     className="btn btn-danger"
-                    onClick={() => handleDelete(index)}
+                    onClick={() => handleDelete(workout._id)}
                   >
                     Delete
                   </button>

@@ -13,7 +13,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "Lütfen şifrenizi giriniz"],
   },
-  workouts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Workout" }],
 })
 
 module.exports = mongoose.model("User", userSchema)

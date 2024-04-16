@@ -1,5 +1,3 @@
-// models/Workout.js
-
 const mongoose = require("mongoose")
 
 const workoutSchema = new mongoose.Schema(
@@ -17,7 +15,8 @@ const workoutSchema = new mongoose.Schema(
       required: true,
     },
     user: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId, // ObjectId türünde yapıldı
+      ref: "User", // Referans modeli belirtildi (varsayılan olarak 'User')
       required: true,
     },
   },

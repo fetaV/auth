@@ -4,6 +4,7 @@ const express = require("express")
 const router = express.Router()
 const jwt = require("jsonwebtoken")
 const Workout = require("../models/Workout")
+const User = require("../models/User") // Kullanıcı modeli eklendi
 
 // Middleware: JWT doğrulama
 const verifyToken = (req, res, next) => {
@@ -19,7 +20,8 @@ const verifyToken = (req, res, next) => {
 // Kullanıcının workout verilerini getirme
 router.get("/", verifyToken, async (req, res) => {
   try {
-    const workouts = await Workout.find({ user: req.user.email })
+    const user = await User.findOne({ email: req.user.email }) // Kullanıcı bilgileri alındı
+    const workouts = await Workout.find({ user: user._id }) // ObjectId kullanıldı
     res.status(200).json(workouts)
   } catch (err) {
     res.status(500).send(err.message)
@@ -30,17 +32,12 @@ router.get("/", verifyToken, async (req, res) => {
 router.post("/", verifyToken, async (req, res) => {
   try {
     const { title, reps, load } = req.body
-    const existingWorkout = await Workout.findOne({ title })
-
-    if (existingWorkout) {
-      return res.status(400).json({ message: "Title is already exist" })
-    }
-
+    const user = await User.findOne({ email: req.user.email }) // Kullanıcı bilgileri alındı
     const workout = new Workout({
       title,
       reps,
       load,
-      user: req.user.email,
+      user: user._id, // ObjectId kullanıldı
     })
     await workout.save()
 

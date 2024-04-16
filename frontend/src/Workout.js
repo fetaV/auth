@@ -69,11 +69,11 @@ function Workout() {
     }
   }
 
-  const handleEdit = async userId => {
+  const handleEdit = async workoutId => {
     try {
       const token = localStorage.getItem("token")
       const response = await axios.put(
-        `/api/workout/${userId}`,
+        `/api/workout/${workoutId}`,
         { title: editTitle, reps: editReps, load: editLoad }, // düzenleme modalından alınan değerleri kullanın
         {
           headers: {
@@ -90,15 +90,15 @@ function Workout() {
     }
   }
 
-  const handleDelete = async userId => {
+  const handleDelete = async workoutId => {
     try {
       const token = localStorage.getItem("token")
-      await axios.delete(`/api/workout/${userId}`, {
+      await axios.delete(`/api/workout/${workoutId}`, {
         headers: {
           Authorization: token,
         },
       })
-      setWorkouts(workouts.filter(user => user._id !== userId))
+      setWorkouts(workouts.filter(workout => workout._id !== workoutId))
       toast.success("Workout deleted successfully!")
     } catch (error) {
       console.error(error.response.data)

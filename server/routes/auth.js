@@ -44,7 +44,7 @@ router.delete("/users/:id", async (req, res) => {
   }
 })
 
-// Kullanıcı düzenleme
+// Kullanıcı güncelleme
 router.put("/users/:id", async (req, res) => {
   const { id } = req.params
 
@@ -59,6 +59,31 @@ router.put("/users/:id", async (req, res) => {
     }
 
     if (req.body.password) {
+      if (req.body.password.length < 8) {
+        return res
+          .status(400)
+          .json({ message: "Password must be at least 8 characters long." })
+      }
+      if (!/[A-Z]/.test(req.body.password)) {
+        return res.status(400).json({
+          message: "Password must contain at least one uppercase letter.",
+        })
+      }
+      if (!/[a-z]/.test(req.body.password)) {
+        return res.status(400).json({
+          message: "Password must contain at least one lowercase letter.",
+        })
+      }
+      if (!/[0-9]/.test(req.body.password)) {
+        return res
+          .status(400)
+          .json({ message: "Password must contain at least one digit." })
+      }
+      if (!/[^A-Za-z0-9]/.test(req.body.password)) {
+        return res.status(400).json({
+          message: "Password must contain at least one special character.",
+        })
+      }
       req.body.password = await bcrypt.hash(req.body.password, 10)
     }
     if (req.body.email) {
@@ -118,6 +143,7 @@ router.post("/login", async (req, res) => {
     const { email, password } = req.body
     const user = await User.findOne({ email })
     if (!user) throw new Error("User not found")
+
     const passwordMatch = await bcrypt.compare(password, user.password)
     if (!passwordMatch) throw new Error("Wrong password, please check it!")
 
@@ -138,6 +164,29 @@ router.post("/login", async (req, res) => {
   } catch (err) {
     res.status(401).json({ message: err.message })
   }
+})
+
+// Özel bir middleware oluşturarak token geçerliliğini kontrol et
+function verifyToken(req, res, next) {
+  const token = req.headers["authorization"]
+  if (!token) return res.status(401).send("Token not provided")
+
+  jwt.verify(token, process.env.SECRET, (err, decoded) => {
+    if (err) {
+      if (err.name === "TokenExpiredError") {
+        return res.status(401).send("Token expired")
+      } else {
+        return res.status(401).send("Invalid token")
+      }
+    }
+    req.user = decoded
+    next()
+  })
+}
+
+// Kullanıcıya token geçerliliğini kontrol eden middleware'ı uygula
+router.get("/protected_route", verifyToken, (req, res) => {
+  res.status(200).send("You have access")
 })
 
 module.exports = router

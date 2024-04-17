@@ -1,17 +1,34 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
+import { jwtDecode } from "jwt-decode" // Değişiklik burada
 
 const Navbar = () => {
-  const isLoggedIn = localStorage.getItem("token")
-  const userName = localStorage.getItem("username")
-  const isAdmin = localStorage.getItem("isAdmin")
+  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("token"))
+  const [userName, setUserName] = useState(localStorage.getItem("username"))
+  const [isAdmin, setIsAdmin] = useState(localStorage.getItem("isAdmin"))
+
+  const isTokenExpired = () => {
+    const token = localStorage.getItem("token")
+    if (!token) return true
+    const decodedToken = jwtDecode(token) // Değişiklik burada
+    const currentTime = Date.now() / 1000
+    return decodedToken.exp < currentTime
+  }
+
+  useEffect(() => {
+    if (isLoggedIn && isTokenExpired()) {
+      handleLogout()
+    }
+  }, [isLoggedIn])
 
   const handleLogout = () => {
     localStorage.removeItem("token")
     localStorage.removeItem("username")
     localStorage.removeItem("isAdmin")
+    setIsLoggedIn(false)
+    setUserName("")
+    setIsAdmin(false)
     window.location = "/login"
   }
-
   return (
     <div>
       <>

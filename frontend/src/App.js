@@ -8,6 +8,7 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import Navbar from "./Navbar"
 import Table from "./Table"
 import Home from "./Home"
+import Maas from "./Maas"
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/workout" element={<Workout />} />
+            <Route path="/maas" element={<Maas />} />
             <Route path="/table" element={<Table />} />
           </Routes>
         </div>

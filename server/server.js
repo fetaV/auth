@@ -20,10 +20,12 @@ app.use(bodyParser.json())
 const Workout = require("./models/Workout")
 const authRouter = require("./routes/auth")
 const workoutRouter = require("./routes/workout")
+const maasRouter = require("./routes/maas")
 
 app.use(cors())
 app.use("/api/auth", authRouter)
 app.use("/api/workout", workoutRouter)
+app.use("/api/maas", maasRouter)
 
 // Sunucu başlatma
 mongoose

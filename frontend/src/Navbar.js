@@ -90,6 +90,9 @@ const Navbar = () => {
                   <a className="dropdown-item" href="/workout">
                     Workout
                   </a>
+                  <a className="dropdown-item" href="/maas">
+                    Maas
+                  </a>
                 </li>
                 {isAdmin && (
                   <li>

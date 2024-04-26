@@ -64,7 +64,6 @@ router.post("/eksi", verifyToken, async (req, res) => {
       ihtiyac,
       user: user._id,
     })
-    console.log("maaseksi", maasEksi)
 
     const eksi = await maasEksi.save()
     res.status(201).json(eksi)

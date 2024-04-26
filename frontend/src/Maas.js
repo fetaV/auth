@@ -42,16 +42,11 @@ function Maas() {
       )
       setMaaslar([...maaslar, response.data])
       setMaasMiktari("")
+      handleSave()
+      window.location.reload()
     } catch (err) {
       console.error(err)
     }
-  }
-
-  const handleExtraRowInputChange = (e, index, field) => {
-    const { value } = e.target
-    const updatedExtraMaaslar = [...extraMaaslar]
-    updatedExtraMaaslar[index][field] = value
-    setExtraMaaslar(updatedExtraMaaslar)
   }
 
   const handleSave = async () => {
@@ -75,13 +70,6 @@ function Maas() {
     } catch (err) {
       console.error(err)
     }
-  }
-
-  const handleAddRow = () => {
-    setExtraMaaslar([
-      ...extraMaaslar,
-      { maasMiktari: "", yatirim: "", luks: "", ihtiyac: "" },
-    ])
   }
 
   return (
@@ -125,6 +113,7 @@ function Maas() {
                       type="number"
                       value={maas.maasMiktari}
                       onChange={e => e.target.value}
+                      disabled
                     />
                   </td>
                   <td>
@@ -132,6 +121,7 @@ function Maas() {
                       type="number"
                       value={maas.yatirim}
                       onChange={e => setYatirim(e.target.value)}
+                      disabled={maas.yatirim ? true : false}
                     />
                   </td>
                   <td>
@@ -139,6 +129,7 @@ function Maas() {
                       type="number"
                       value={maas.luks}
                       onChange={e => setLuks(e.target.value)}
+                      disabled={maas.luks ? true : false}
                     />
                   </td>
                   <td>
@@ -146,49 +137,13 @@ function Maas() {
                       type="number"
                       value={maas.ihtiyac}
                       onChange={e => setIhtiyac(e.target.value)}
-                    />
-                  </td>
-                </tr>
-              ))}
-              {extraMaaslar.map((extraMaas, index) => (
-                <tr key={index}>
-                  <td>
-                    <input
-                      type="number"
-                      value={extraMaas.maasMiktari}
-                      onChange={e =>
-                        handleExtraRowInputChange(e, index, "maasMiktari")
-                      }
-                    />
-                  </td>
-                  <td>
-                    <input
-                      type="number"
-                      value={extraMaas.yatirim}
-                      onChange={e => setYatirim(e.target.value)}
-                    />
-                  </td>
-                  <td>
-                    <input
-                      type="number"
-                      value={extraMaas.luks}
-                      onChange={e => setLuks(e.target.value)}
-                    />
-                  </td>
-                  <td>
-                    <input
-                      type="number"
-                      value={extraMaas.ihtiyac}
-                      onChange={e => setIhtiyac(e.target.value)}
+                      disabled={maas.ihtiyac ? true : false}
                     />
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-          <button className="btn btn-success" onClick={handleAddRow}>
-            +
-          </button>
           <button className="btn btn-primary" onClick={handleSave}>
             Kaydet
           </button>

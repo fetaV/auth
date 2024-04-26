@@ -1,10 +1,16 @@
+// client/src/Maas.js
+
 import React, { useState, useEffect } from "react"
 import axios from "axios"
 
 function Maas() {
   const [maaslar, setMaaslar] = useState([])
   const [maasMiktari, setMaasMiktari] = useState("")
-  const [extraRows, setExtraRows] = useState(0)
+  const [extraMaaslar, setExtraMaaslar] = useState([])
+  const [eksi, setEksi] = useState([])
+  const [yatirim, setYatirim] = useState("")
+  const [luks, setLuks] = useState("")
+  const [ihtiyac, setIhtiyac] = useState("")
 
   useEffect(() => {
     const token = localStorage.getItem("token")
@@ -41,15 +47,41 @@ function Maas() {
     }
   }
 
-  const handleAddRow = () => {
-    setExtraRows(extraRows + 1)
+  const handleExtraRowInputChange = (e, index, field) => {
+    const { value } = e.target
+    const updatedExtraMaaslar = [...extraMaaslar]
+    updatedExtraMaaslar[index][field] = value
+    setExtraMaaslar(updatedExtraMaaslar)
   }
 
-  const handleInputChange = (e, index) => {
-    const { name, value } = e.target
-    const updatedMaaslar = [...maaslar]
-    updatedMaaslar[index][name] = value
-    setMaaslar(updatedMaaslar)
+  const handleSave = async () => {
+    try {
+      const token = localStorage.getItem("token")
+      const response = await axios.post(
+        "/api/maas/eksi",
+        {
+          yatirim,
+          luks,
+          ihtiyac,
+        },
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      )
+      console.log(response)
+      setEksi(response.data)
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  const handleAddRow = () => {
+    setExtraMaaslar([
+      ...extraMaaslar,
+      { maasMiktari: "", yatirim: "", luks: "", ihtiyac: "" },
+    ])
   }
 
   return (
@@ -63,6 +95,7 @@ function Maas() {
                 type="number"
                 placeholder="Maaş Miktarı"
                 value={maasMiktari}
+                required
                 onChange={e => setMaasMiktari(e.target.value)}
               />
             </div>
@@ -90,35 +123,74 @@ function Maas() {
                   <td>
                     <input
                       type="number"
-                      name="maasMiktari"
                       value={maas.maasMiktari}
-                      onChange={e => handleInputChange(e, index)}
+                      onChange={e => e.target.value}
                     />
                   </td>
-                  <td>{maas.yatirim}</td>
-                  <td>{maas.luks}</td>
-                  <td>{maas.ihtiyac}</td>
+                  <td>
+                    <input
+                      type="number"
+                      value={maas.yatirim}
+                      onChange={e => setYatirim(e.target.value)}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      value={maas.luks}
+                      onChange={e => setLuks(e.target.value)}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      value={maas.ihtiyac}
+                      onChange={e => setIhtiyac(e.target.value)}
+                    />
+                  </td>
                 </tr>
               ))}
-              {[...Array(extraRows)].map((_, index) => (
+              {extraMaaslar.map((extraMaas, index) => (
                 <tr key={index}>
                   <td>
                     <input
                       type="number"
-                      name="maasMiktari"
-                      value={maaslar[maaslar.length - 1]?.maasMiktari || ""}
-                      onChange={e => handleInputChange(e, maaslar.length - 1)}
+                      value={extraMaas.maasMiktari}
+                      onChange={e =>
+                        handleExtraRowInputChange(e, index, "maasMiktari")
+                      }
                     />
                   </td>
-                  <td>{/* Yatırım */}</td>
-                  <td>{/* Lüks */}</td>
-                  <td>{/* İhtiyaç */}</td>
+                  <td>
+                    <input
+                      type="number"
+                      value={extraMaas.yatirim}
+                      onChange={e => setYatirim(e.target.value)}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      value={extraMaas.luks}
+                      onChange={e => setLuks(e.target.value)}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      value={extraMaas.ihtiyac}
+                      onChange={e => setIhtiyac(e.target.value)}
+                    />
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
           <button className="btn btn-success" onClick={handleAddRow}>
             +
+          </button>
+          <button className="btn btn-primary" onClick={handleSave}>
+            Kaydet
           </button>
         </div>
       </div>

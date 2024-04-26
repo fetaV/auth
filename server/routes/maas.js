@@ -52,4 +52,44 @@ router.post("/", verifyToken, async (req, res) => {
   }
 })
 
+//Maaş Eksiltme
+router.post("/eksi", verifyToken, async (req, res) => {
+  try {
+    const user = await User.findOne({ email: req.user.email })
+    const { yatirim, luks, ihtiyac } = req.body
+
+    const maasEksi = new Maas({
+      yatirim,
+      luks,
+      ihtiyac,
+      user: user._id,
+    })
+    console.log("maaseksi", maasEksi)
+
+    const eksi = await maasEksi.save()
+    res.status(201).json(eksi)
+  } catch (err) {
+    res.status(400).json({ message: err.message })
+  }
+})
+
+// Maaşları güncelle
+// router.put("/", verifyToken, async (req, res) => {
+//   try {
+//     const updatedMaaslar = req.body.maaslar
+//     for (const maas of updatedMaaslar) {
+//       const existingMaas = await Maas.findById(maas._id)
+//       if (!existingMaas) {
+//         return res.status(404).send("Maaş bulunamadı.")
+//       }
+//       // Yatırım miktarını güncelle
+//       existingMaas.yatirim -= maas.yatirim
+//       await existingMaas.save()
+//     }
+//     res.status(200).send("Maaşlar güncellendi.")
+//   } catch (err) {
+//     res.status(400).json({ message: err.message })
+//   }
+// })
+
 module.exports = router

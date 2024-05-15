@@ -62,7 +62,7 @@ function Maas3() {
               </div>
               <div className="form-group mt-3">
                 <label htmlFor="typeTitleX" className="form-label">
-                  Kullanılma Seçeneği
+                  Kullanım Seçeneği
                 </label>
                 <div className="dropdown">
                   <button
@@ -71,7 +71,7 @@ function Maas3() {
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                   >
-                    Kullanılma Seçeneği
+                    Kullanım Seçeneği
                   </button>
                   <ul className="dropdown-menu w-100">
                     <li>
@@ -141,6 +141,18 @@ function Maas3() {
                       </button>
                       <button className="btn btn-danger">Delete</button>
                     </td>
+                  </tr>
+                  <tr>
+                    <td>Toplam Harcanan Tutar</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                  </tr>
+                  <tr>
+                    <td>Kalan Tutar</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
                   </tr>
                 </tbody>
               </table>

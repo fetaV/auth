@@ -6,11 +6,25 @@ import axios from "axios"
 function Maas() {
   const [maaslar, setMaaslar] = useState([])
   const [maasMiktari, setMaasMiktari] = useState("")
-  const [extraMaaslar, setExtraMaaslar] = useState([])
   const [eksi, setEksi] = useState([])
   const [yatirim, setYatirim] = useState("")
   const [luks, setLuks] = useState("")
   const [ihtiyac, setIhtiyac] = useState("")
+  const yatirimMiktari = maaslar.length > 0 ? maaslar[0].maasMiktari * 0.2 : ""
+  const luksMiktari = maaslar.length > 0 ? maaslar[0].maasMiktari * 0.3 : ""
+  const ihtiyacMiktari = maaslar.length > 0 ? maaslar[0].maasMiktari * 0.5 : ""
+  const toplamYatirim = maaslar.reduce(
+    (total, maas) => total + (maas.yatirim || 0),
+    0
+  )
+  const toplamLuks = maaslar.reduce(
+    (total, maas) => total + (maas.luks || 0),
+    0
+  )
+  const toplamIhtiyac = maaslar.reduce(
+    (total, maas) => total + (maas.ihtiyac || 0),
+    0
+  )
 
   useEffect(() => {
     const token = localStorage.getItem("token")
@@ -43,7 +57,6 @@ function Maas() {
       setMaaslar([...maaslar, response.data])
       setMaasMiktari("")
       handleSave()
-      window.location.reload()
     } catch (err) {
       console.error(err)
     }
@@ -99,49 +112,70 @@ function Maas() {
           <table className="table">
             <thead>
               <tr>
-                <th scope="col">Maaş Miktarı</th>
-                <th scope="col">Yatırım</th>
-                <th scope="col">Lüks</th>
-                <th scope="col">İhtiyaç</th>
+                <th scope="col">Maaş Miktar: {maasMiktari}</th>
+                <th scope="col">Yatırım: {yatirimMiktari}</th>
+                <th scope="col">Lüks: {luksMiktari}</th>
+                <th scope="col">İhtiyaç: {ihtiyacMiktari}</th>
               </tr>
             </thead>
             <tbody>
               {maaslar.map((maas, index) => (
-                <tr key={maas._id}>
-                  <td>
-                    <input
-                      type="number"
-                      value={maas.maasMiktari}
-                      onChange={e => e.target.value}
-                      disabled
-                    />
-                  </td>
-                  <td>
-                    <input
-                      type="number"
-                      value={maas.yatirim}
-                      onChange={e => setYatirim(e.target.value)}
-                      disabled={maas.yatirim ? true : false}
-                    />
-                  </td>
-                  <td>
-                    <input
-                      type="number"
-                      value={maas.luks}
-                      onChange={e => setLuks(e.target.value)}
-                      disabled={maas.luks ? true : false}
-                    />
-                  </td>
-                  <td>
-                    <input
-                      type="number"
-                      value={maas.ihtiyac}
-                      onChange={e => setIhtiyac(e.target.value)}
-                      disabled={maas.ihtiyac ? true : false}
-                    />
-                  </td>
-                </tr>
+                <>
+                  <tr key={maas._id}>
+                    <td>
+                      <input
+                        className="form-control"
+                        type="number"
+                        value={maas.maasMiktari}
+                        onChange={e => e.target.value}
+                        disabled
+                      />
+                    </td>
+                    <td>
+                      <input
+                        className="form-control"
+                        type="number"
+                        defaultValue={maas.maasMiktari * 0.2}
+                        value={maas.yatirim}
+                        onChange={e => setYatirim(e.target.value)}
+                        disabled={maas.yatirim ? true : false}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        className="form-control"
+                        type="number"
+                        defaultValue={maas.maasMiktari * 0.3}
+                        value={maas.luks}
+                        onChange={e => setLuks(e.target.value)}
+                        disabled={maas.luks ? true : false}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        className="form-control"
+                        type="number"
+                        defaultValue={maas.maasMiktari * 0.5}
+                        value={maas.ihtiyac}
+                        onChange={e => setIhtiyac(e.target.value)}
+                        disabled={maas.ihtiyac ? true : false}
+                      />
+                    </td>
+                  </tr>
+                </>
               ))}
+              <tr>
+                <td>Toplam Harcanan Tutar</td>
+                <td>{toplamYatirim}</td>
+                <td>{toplamIhtiyac}</td>
+                <td>{toplamLuks}</td>
+              </tr>
+              <tr>
+                <td>Kalan Tutar</td>
+                <td>{yatirimMiktari - toplamYatirim}</td>
+                <td>{luksMiktari - toplamLuks}</td>
+                <td>{ihtiyacMiktari - toplamIhtiyac}</td>
+              </tr>
             </tbody>
           </table>
           <button className="btn btn-primary" onClick={handleSave}>

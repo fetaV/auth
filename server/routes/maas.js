@@ -33,15 +33,9 @@ router.post("/", verifyToken, async (req, res) => {
     const user = await User.findOne({ email: req.user.email })
 
     const maasMiktari = req.body.maasMiktari
-    const yatirim = maasMiktari * 0.2
-    const luks = maasMiktari * 0.3
-    const ihtiyac = maasMiktari * 0.5
 
     const maas = new Maas({
-      maasMiktari: req.body.maasMiktari,
-      yatirim: yatirim,
-      luks: luks,
-      ihtiyac: ihtiyac,
+      maasMiktari,
       user: user._id,
     })
 

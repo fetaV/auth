@@ -139,7 +139,13 @@ function Maas3() {
                       >
                         Edit
                       </button>
-                      <button className="btn btn-danger">Delete</button>
+                      <button
+                        className="btn btn-danger"
+                        data-bs-toggle="modal"
+                        data-bs-target="#deleteModal"
+                      >
+                        Delete
+                      </button>
                     </td>
                   </tr>
                   <tr>
@@ -160,6 +166,8 @@ function Maas3() {
           </ul>
         </div>
       </div>
+
+      {/* Edit Modal */}
       <div
         className="modal fade"
         id="exampleModal"
@@ -219,15 +227,45 @@ function Maas3() {
               </div>
             </div>
             <div className="modal-footer">
+              <button type="button" className="btn btn-primary">
+                Kaydet
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Delete Modal */}
+      <div
+        className="modal fade"
+        id="deleteModal"
+        tabIndex="-1"
+        aria-labelledby="deleteModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="deleteModalLabel">
+                Bu işlemi silmek istediğinize emin misiniz?
+              </h1>
               <button
                 type="button"
-                className="btn btn-secondary"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-danger"
                 data-bs-dismiss="modal"
               >
-                Close
+                Hayır
               </button>
-              <button type="button" className="btn btn-primary">
-                Save changes
+              <button type="button" className="btn btn-success">
+                Evet
               </button>
             </div>
           </div>

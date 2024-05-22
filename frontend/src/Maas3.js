@@ -7,6 +7,8 @@ import { FaPen } from "react-icons/fa6"
 function Maas3() {
   const [maaslar, setMaaslar] = useState([])
   const [maasMiktari, setMaasMiktari] = useState("")
+  const [newMaas, setNewMaas] = useState("")
+  const [maasToEdit, setMaasToEdit] = useState(null)
   const [selectedOption, setSelectedOption] = useState(
     "Harcama seçeneği seçiniz"
   )
@@ -29,6 +31,11 @@ function Maas3() {
 
   const handleOptionSelect = option => {
     setSelectedOption(option)
+  }
+
+  const handleEditMaas = maas => {
+    setMaasToEdit(maas) // Düzenlenecek maaşı belirle
+    setNewMaas(maas.maasMiktari) // Modal içindeki input değerini belirle
   }
 
   useEffect(() => {
@@ -178,9 +185,10 @@ function Maas3() {
             {maaslar.map((maas, index) => (
               <h4
                 key={index}
-                className="btn btn-info d-flex justify-content-center align-items-center "
+                className="btn btn-info d-flex justify-content-center align-items-center"
                 data-bs-toggle="modal"
                 data-bs-target="#maasEditModal"
+                onClick={() => handleEditMaas(maas)}
               >
                 Toplam Maaş Miktarı: {maas.maasMiktari}
                 <FaPen className="ms-2" />
@@ -376,6 +384,8 @@ function Maas3() {
                   id="editMaas"
                   placeholder="Maas"
                   required
+                  value={newMaas}
+                  onChange={e => setNewMaas(e.target.value)}
                 />
               </div>
             </div>

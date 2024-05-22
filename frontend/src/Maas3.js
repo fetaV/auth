@@ -275,6 +275,18 @@ function Maas3() {
             <div className="modal-body">
               <div className="form-group mt-3">
                 <label htmlFor="editIhtiyac" className="form-label">
+                  Harcama
+                </label>
+                <input
+                  type="number"
+                  className="form-control"
+                  id="editHarcama"
+                  placeholder="Harcama yeri giriniz"
+                  required
+                />
+              </div>
+              <div className="form-group mt-3">
+                <label htmlFor="editIhtiyac" className="form-label">
                   İhtiyaç
                 </label>
                 <input

@@ -186,14 +186,16 @@ function Maas3() {
         <div className="col-md-9">
           <div className="d-flex justify-content-between align-items-center">
             <h3>Harcama Tablosu</h3>
-            <h4
-              className="btn btn-info d-flex justify-content-center align-items-center "
-              data-bs-toggle="modal"
-              data-bs-target="#maasEditModal"
-            >
-              Toplam Maaş Miktarı: {maasMiktari}
-              <FaPen className="ms-2" />
-            </h4>
+            {maaslar.map((maas, index) => (
+              <h4
+                className="btn btn-info d-flex justify-content-center align-items-center "
+                data-bs-toggle="modal"
+                data-bs-target="#maasEditModal"
+              >
+                Toplam Maaş Miktarı: {maas.maasMiktari}
+                <FaPen className="ms-2" />
+              </h4>
+            ))}
           </div>
           <ul className="list-group mt-3">
             <li className="list-group-item d-flex justify-content-between align-items-center">
@@ -204,38 +206,40 @@ function Maas3() {
                 <th>Lüks</th>
                 <th>Aksiyon</th>
                 <tbody>
-                  <tr>
-                    <td data-title="Harcama Seçeneği">Eğlence</td>
-                    <td data-title="İhtiyaç">0</td>
-                    <td data-title="Yatırım">0</td>
-                    <td data-title="Lüks">0</td>
-                    <td data-title="Aksiyon">
-                      <button
-                        className="btn btn-warning me-2 text-white"
-                        data-bs-toggle="modal"
-                        data-bs-target="#editModal"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="btn btn-danger"
-                        data-bs-toggle="modal"
-                        data-bs-target="#deleteModal"
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
+                  {maaslar.map((maas, index) => (
+                    <tr>
+                      <td data-title="Harcama Seçeneği">Eğlence</td>
+                      <td data-title="İhtiyaç"></td>
+                      <td data-title="Yatırım"></td>
+                      <td data-title="Lüks"></td>
+                      <td data-title="Aksiyon">
+                        <button
+                          className="btn btn-warning me-2 text-white"
+                          data-bs-toggle="modal"
+                          data-bs-target="#editModal"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="btn btn-danger"
+                          data-bs-toggle="modal"
+                          data-bs-target="#deleteModal"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
                   <tr>
                     <td>Toplam Harcanan Tutar</td>
-                    <td>{toplamYatirim}</td>
                     <td>{toplamIhtiyac}</td>
+                    <td>{toplamYatirim}</td>
                     <td>{toplamLuks}</td>
                   </tr>
                   <tr>
                     <td>Kalan Tutar</td>
-                    <td>{yatirimMiktari - toplamYatirim}</td>
                     <td>{ihtiyacMiktari - toplamIhtiyac}</td>
+                    <td>{yatirimMiktari - toplamYatirim}</td>
                     <td>{luksMiktari - toplamLuks}</td>
                   </tr>
                 </tbody>

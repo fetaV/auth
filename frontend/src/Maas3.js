@@ -5,6 +5,59 @@ import "react-toastify/dist/ReactToastify.css"
 import { FaPen } from "react-icons/fa6"
 
 function Maas3() {
+  const [maaslar, setMaaslar] = useState([])
+  const [maasMiktari, setMaasMiktari] = useState("")
+  const yatirimMiktari = maaslar.length > 0 ? maaslar[0].maasMiktari * 0.2 : ""
+  const luksMiktari = maaslar.length > 0 ? maaslar[0].maasMiktari * 0.3 : ""
+  const ihtiyacMiktari = maaslar.length > 0 ? maaslar[0].maasMiktari * 0.5 : ""
+  const toplamYatirim = maaslar.reduce(
+    (total, maas) => total + (maas.yatirim || 0),
+    0
+  )
+  const toplamLuks = maaslar.reduce(
+    (total, maas) => total + (maas.luks || 0),
+    0
+  )
+  const toplamIhtiyac = maaslar.reduce(
+    (total, maas) => total + (maas.ihtiyac || 0),
+    0
+  )
+
+  useEffect(() => {
+    const token = localStorage.getItem("token")
+
+    axios
+      .get("/api/maas", {
+        headers: {
+          Authorization: token,
+        },
+      })
+      .then(res => setMaaslar(res.data))
+      .catch(err => console.error(err))
+  }, [])
+
+  const handleSubmit = async e => {
+    e.preventDefault()
+    try {
+      const token = localStorage.getItem("token")
+      const response = await axios.post(
+        "/api/maas",
+        {
+          maasMiktari,
+        },
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      )
+      setMaaslar([...maaslar, response.data])
+      setMaasMiktari("")
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
   return (
     <div className="container mt-5">
       <ToastContainer />
@@ -22,14 +75,20 @@ function Maas3() {
                 className="form-control"
                 id="typeRepsX"
                 placeholder="Maaş"
+                value={maasMiktari}
                 required
+                onChange={e => setMaasMiktari(e.target.value)}
               />
-              <button type="submit" className="btn btn-primary mt-3">
+              <button
+                type="submit"
+                onClick={handleSubmit}
+                className="btn btn-primary mt-3"
+              >
                 Save
               </button>
             </div>
             <div className="border rounded p-3 mb-3">
-              <div className="form-group mt-3">
+              {/* <div className="form-group mt-3">
                 <label htmlFor="typeTitleX" className="form-label">
                   Harcama
                 </label>
@@ -39,8 +98,9 @@ function Maas3() {
                     type="button"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
+                    required
                   >
-                    Harcaama seçeneği seçiniz
+                    Harcama seçeneği seçiniz
                   </button>
                   <ul className="dropdown-menu w-100">
                     <li>
@@ -60,6 +120,18 @@ function Maas3() {
                     </li>
                   </ul>
                 </div>
+              </div> */}
+              <div className="form-group mt-3">
+                <label htmlFor="editIhtiyac" className="form-label">
+                  Harcama
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="editIhtiyac"
+                  placeholder="Harcanan yeri giriniz"
+                  required
+                />
               </div>
               <div className="form-group mt-3">
                 <label htmlFor="typeTitleX" className="form-label">
@@ -119,17 +191,17 @@ function Maas3() {
               data-bs-toggle="modal"
               data-bs-target="#maasEditModal"
             >
-              Toplam Maaş Miktarı: 25000
+              Toplam Maaş Miktarı: {maasMiktari}
               <FaPen className="ms-2" />
             </h4>
           </div>
           <ul className="list-group mt-3">
             <li className="list-group-item d-flex justify-content-between align-items-center">
-              <table class="table">
+              <table className="table">
                 <th>Harcama</th>
-                <th>İhtiyaç: 12500</th>
-                <th>Yatırım: 5000</th>
-                <th>Lüks: 7500</th>
+                <th>İhtiyaç</th>
+                <th>Yatırım</th>
+                <th>Lüks</th>
                 <th>Aksiyon</th>
                 <tbody>
                   <tr>
@@ -156,15 +228,15 @@ function Maas3() {
                   </tr>
                   <tr>
                     <td>Toplam Harcanan Tutar</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
+                    <td>{toplamYatirim}</td>
+                    <td>{toplamIhtiyac}</td>
+                    <td>{toplamLuks}</td>
                   </tr>
                   <tr>
                     <td>Kalan Tutar</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
+                    <td>{yatirimMiktari - toplamYatirim}</td>
+                    <td>{ihtiyacMiktari - toplamIhtiyac}</td>
+                    <td>{luksMiktari - toplamLuks}</td>
                   </tr>
                 </tbody>
               </table>

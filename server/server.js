@@ -21,11 +21,13 @@ const Workout = require("./models/Workout")
 const authRouter = require("./routes/auth")
 const workoutRouter = require("./routes/workout")
 const maasRouter = require("./routes/maas")
+const maasRouter3 = require("./routes/maas3")
 
 app.use(cors())
 app.use("/api/auth", authRouter)
 app.use("/api/workout", workoutRouter)
 app.use("/api/maas", maasRouter)
+app.use("/api/maas3", maasRouter3)
 
 // Sunucu başlatma
 mongoose

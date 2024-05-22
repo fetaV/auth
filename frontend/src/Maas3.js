@@ -8,6 +8,8 @@ function Maas3() {
   const [maaslar, setMaaslar] = useState([])
   const [maasMiktari, setMaasMiktari] = useState("")
   const [newMaas, setNewMaas] = useState("")
+  const [miktar, setMiktar] = useState("")
+  const [harcama, setHarcama] = useState("")
   const [maasToEdit, setMaasToEdit] = useState(null)
   const [selectedOption, setSelectedOption] = useState(
     "Harcama seçeneği seçiniz"
@@ -31,6 +33,35 @@ function Maas3() {
 
   const handleOptionSelect = option => {
     setSelectedOption(option)
+  }
+
+  const handleSubmit2 = async e => {
+    e.preventDefault()
+
+    let kullanimTipi
+    if (selectedOption === "İhtiyaç") {
+      kullanimTipi = 0
+    } else if (selectedOption === "Yatırım") {
+      kullanimTipi = 1
+    } else if (selectedOption === "Lüks") {
+      kullanimTipi = 2
+    }
+
+    const data = {
+      aciklama: harcama,
+      kullanim: kullanimTipi,
+      miktar: parseInt(miktar, 10),
+    }
+
+    console.log("Data to be sent:", data) // Log eklendi
+
+    try {
+      const response = await axios.post("/api/maas3", data)
+      console.log("Response data:", response.data) // Log eklendi
+      // Başarılı kayıttan sonra yapılacak işlemler
+    } catch (error) {
+      console.error("Error saving the data", error)
+    }
   }
 
   const handleEditMaas = maas => {
@@ -105,77 +136,87 @@ function Maas3() {
               </div>
             )}
             <div className="border rounded p-3 mb-3">
-              <div className="form-group mt-3">
-                <label htmlFor="editIhtiyac" className="form-label">
-                  Harcama
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="editIhtiyac"
-                  placeholder="Harcanan yeri giriniz"
-                  required
-                />
-              </div>
-              <div className="form-group mt-3">
-                <label htmlFor="typeTitleX" className="form-label">
-                  Kullanım
-                </label>
-                <div className="dropdown">
-                  <button
-                    className="btn btn-secondary dropdown-toggle w-100 text-start"
-                    type="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  >
-                    {selectedOption}
-                  </button>
-                  <ul className="dropdown-menu w-100">
-                    <li>
-                      <a
-                        className="dropdown-item"
-                        href="#"
-                        onClick={() => handleOptionSelect("İhtiyaç")}
-                      >
-                        İhtiyaç
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        className="dropdown-item"
-                        href="#"
-                        onClick={() => handleOptionSelect("Yatırım")}
-                      >
-                        Yatırım
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        className="dropdown-item"
-                        href="#"
-                        onClick={() => handleOptionSelect("Lüks")}
-                      >
-                        Lüks
-                      </a>
-                    </li>
-                  </ul>
+              <form>
+                <div className="form-group mt-3">
+                  <label htmlFor="harcama" className="form-label">
+                    Harcama
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="harcama"
+                    value={harcama}
+                    onChange={e => setHarcama(e.target.value)}
+                    placeholder="Harcanan yeri giriniz"
+                    required
+                  />
                 </div>
-              </div>
-              <div className="form-group mt-3">
-                <label htmlFor="typeLoadX" className="form-label">
-                  Miktar
-                </label>
-                <input
-                  type="number"
-                  className="form-control"
-                  id="typeLoadX"
-                  placeholder="Miktar"
-                  required
-                />
-              </div>
-              <button type="submit" className="btn btn-primary mt-3">
-                Save
-              </button>
+                <div className="form-group mt-3">
+                  <label htmlFor="typeTitleX" className="form-label">
+                    Kullanım
+                  </label>
+                  <div className="dropdown">
+                    <button
+                      className="btn btn-secondary dropdown-toggle w-100 text-start"
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      {selectedOption}
+                    </button>
+                    <ul className="dropdown-menu w-100">
+                      <li>
+                        <a
+                          className="dropdown-item"
+                          href="#"
+                          onClick={() => handleOptionSelect("İhtiyaç")}
+                        >
+                          İhtiyaç
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          className="dropdown-item"
+                          href="#"
+                          onClick={() => handleOptionSelect("Yatırım")}
+                        >
+                          Yatırım
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          className="dropdown-item"
+                          href="#"
+                          onClick={() => handleOptionSelect("Lüks")}
+                        >
+                          Lüks
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div className="form-group mt-3">
+                  <label htmlFor="miktar" className="form-label">
+                    Miktar
+                  </label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    id="miktar"
+                    value={miktar}
+                    onChange={e => setMiktar(e.target.value)}
+                    placeholder="Miktar"
+                    required
+                  />
+                </div>
+                <button
+                  type="submit"
+                  onClick={handleSubmit2}
+                  className="btn btn-primary mt-3"
+                >
+                  Save
+                </button>
+              </form>
             </div>
           </form>
         </div>

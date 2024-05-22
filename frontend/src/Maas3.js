@@ -7,6 +7,10 @@ import { FaPen } from "react-icons/fa6"
 function Maas3() {
   const [maaslar, setMaaslar] = useState([])
   const [maasMiktari, setMaasMiktari] = useState("")
+  const [selectedOption, setSelectedOption] = useState(
+    "Harcama seçeneği seçiniz"
+  )
+
   const yatirimMiktari = maaslar.length > 0 ? maaslar[0].maasMiktari * 0.2 : ""
   const luksMiktari = maaslar.length > 0 ? maaslar[0].maasMiktari * 0.3 : ""
   const ihtiyacMiktari = maaslar.length > 0 ? maaslar[0].maasMiktari * 0.5 : ""
@@ -22,6 +26,10 @@ function Maas3() {
     (total, maas) => total + (maas.ihtiyac || 0),
     0
   )
+
+  const handleOptionSelect = option => {
+    setSelectedOption(option)
+  }
 
   useEffect(() => {
     const token = localStorage.getItem("token")
@@ -66,61 +74,30 @@ function Maas3() {
         <div className="col-md-3">
           <h3>Parasal Düzenlemeler</h3>
           <form>
-            <div className="form-group mt-3 border rounded p-3 mb-3">
-              <label htmlFor="typeRepsX" className="form-label">
-                Maaşınızı Giriniz
-              </label>
-              <input
-                type="number"
-                className="form-control"
-                id="typeRepsX"
-                placeholder="Maaş"
-                value={maasMiktari}
-                required
-                onChange={e => setMaasMiktari(e.target.value)}
-              />
-              <button
-                type="submit"
-                onClick={handleSubmit}
-                className="btn btn-primary mt-3"
-              >
-                Save
-              </button>
-            </div>
-            <div className="border rounded p-3 mb-3">
-              {/* <div className="form-group mt-3">
-                <label htmlFor="typeTitleX" className="form-label">
-                  Harcama
+            {!maaslar.some(maas => maas.maasMiktari) && (
+              <div className="form-group mt-3 border rounded p-3 mb-3">
+                <label htmlFor="typeRepsX" className="form-label">
+                  Maaşınızı Giriniz
                 </label>
-                <div className="dropdown">
-                  <button
-                    className="btn btn-secondary dropdown-toggle w-100 text-start"
-                    type="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                    required
-                  >
-                    Harcama seçeneği seçiniz
-                  </button>
-                  <ul className="dropdown-menu w-100">
-                    <li>
-                      <a className="dropdown-item" href="#">
-                        Action
-                      </a>
-                    </li>
-                    <li>
-                      <a className="dropdown-item" href="#">
-                        Another action
-                      </a>
-                    </li>
-                    <li>
-                      <a className="dropdown-item" href="#">
-                        Something else here
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </div> */}
+                <input
+                  type="number"
+                  className="form-control"
+                  id="typeRepsX"
+                  placeholder="Maaş"
+                  value={maasMiktari}
+                  required
+                  onChange={e => setMaasMiktari(e.target.value)}
+                />
+                <button
+                  type="submit"
+                  onClick={handleSubmit}
+                  className="btn btn-primary mt-3"
+                >
+                  Save
+                </button>
+              </div>
+            )}
+            <div className="border rounded p-3 mb-3">
               <div className="form-group mt-3">
                 <label htmlFor="editIhtiyac" className="form-label">
                   Harcama
@@ -144,21 +121,33 @@ function Maas3() {
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                   >
-                    Kullanım seçeneği seçiniz
+                    {selectedOption}
                   </button>
                   <ul className="dropdown-menu w-100">
                     <li>
-                      <a className="dropdown-item" href="#">
+                      <a
+                        className="dropdown-item"
+                        href="#"
+                        onClick={() => handleOptionSelect("İhtiyaç")}
+                      >
                         İhtiyaç
                       </a>
                     </li>
                     <li>
-                      <a className="dropdown-item" href="#">
+                      <a
+                        className="dropdown-item"
+                        href="#"
+                        onClick={() => handleOptionSelect("Yatırım")}
+                      >
                         Yatırım
                       </a>
                     </li>
                     <li>
-                      <a className="dropdown-item" href="#">
+                      <a
+                        className="dropdown-item"
+                        href="#"
+                        onClick={() => handleOptionSelect("Lüks")}
+                      >
                         Lüks
                       </a>
                     </li>
@@ -188,6 +177,7 @@ function Maas3() {
             <h3>Harcama Tablosu</h3>
             {maaslar.map((maas, index) => (
               <h4
+                key={index}
                 className="btn btn-info d-flex justify-content-center align-items-center "
                 data-bs-toggle="modal"
                 data-bs-target="#maasEditModal"
@@ -200,14 +190,18 @@ function Maas3() {
           <ul className="list-group mt-3">
             <li className="list-group-item d-flex justify-content-between align-items-center">
               <table className="table">
-                <th>Harcama</th>
-                <th>İhtiyaç</th>
-                <th>Yatırım</th>
-                <th>Lüks</th>
-                <th>Aksiyon</th>
+                <thead>
+                  <tr>
+                    <th>Harcama</th>
+                    <th>İhtiyaç</th>
+                    <th>Yatırım</th>
+                    <th>Lüks</th>
+                    <th>Aksiyon</th>
+                  </tr>
+                </thead>
                 <tbody>
                   {maaslar.map((maas, index) => (
-                    <tr>
+                    <tr key={index}>
                       <td data-title="Harcama Seçeneği">Eğlence</td>
                       <td data-title="İhtiyaç"></td>
                       <td data-title="Yatırım"></td>

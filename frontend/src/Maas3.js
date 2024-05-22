@@ -30,7 +30,7 @@ function Maas3() {
             <div className="border p-3 mb-3">
               <div className="form-group mt-3">
                 <label htmlFor="typeTitleX" className="form-label">
-                  Harcama Seçeneği
+                  Harcama
                 </label>
                 <div className="dropdown">
                   <button
@@ -62,7 +62,7 @@ function Maas3() {
               </div>
               <div className="form-group mt-3">
                 <label htmlFor="typeTitleX" className="form-label">
-                  Kullanım Seçeneği
+                  Kullanım
                 </label>
                 <div className="dropdown">
                   <button
@@ -71,7 +71,7 @@ function Maas3() {
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                   >
-                    Kullanım Seçeneği
+                    Kullanım seçeneği seçiniz
                   </button>
                   <ul className="dropdown-menu w-100">
                     <li>
@@ -120,7 +120,7 @@ function Maas3() {
           <ul className="list-group mt-3">
             <li className="list-group-item d-flex justify-content-between align-items-center">
               <table class="table">
-                <th>Harcama Seçeneği</th>
+                <th>Harcama</th>
                 <th>İhtiyaç</th>
                 <th>Yatırım</th>
                 <th>Lüks</th>
@@ -171,7 +171,7 @@ function Maas3() {
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="exampleModalLabel">
-                Workout Update
+                Harcama Düzenleme
               </h1>
               <button
                 type="button"
@@ -182,38 +182,38 @@ function Maas3() {
             </div>
             <div className="modal-body">
               <div className="form-group mt-3">
-                <label htmlFor="editTitle" className="form-label">
-                  Title
+                <label htmlFor="editIhtiyac" className="form-label">
+                  İhtiyaç
                 </label>
                 <input
-                  type="text"
+                  type="number"
                   className="form-control"
-                  id="editTitle"
-                  placeholder="Title"
+                  id="editIhtiyac"
+                  placeholder="İhtiyac"
                   required
                 />
               </div>
               <div className="form-group mt-3">
                 <label htmlFor="editReps" className="form-label">
-                  Reps
+                  Yatirim
                 </label>
                 <input
                   type="number"
                   className="form-control"
-                  id="editReps"
-                  placeholder="Reps"
+                  id="editYatirim"
+                  placeholder="Yatirim"
                   required
                 />
               </div>
               <div className="form-group mt-3">
-                <label htmlFor="editLoad" className="form-label">
-                  Load
+                <label htmlFor="editLuks" className="form-label">
+                  Luks
                 </label>
                 <input
                   type="number"
                   className="form-control"
-                  id="editLoad"
-                  placeholder="Load"
+                  id="editLuks"
+                  placeholder="Luks"
                   required
                 />
               </div>

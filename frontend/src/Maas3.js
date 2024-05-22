@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import axios from "axios"
 import { toast, ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
+import { FaPen } from "react-icons/fa6"
 
 function Maas3() {
   return (
@@ -12,7 +13,7 @@ function Maas3() {
         <div className="col-md-3">
           <h3>Parasal Düzenlemeler</h3>
           <form>
-            <div className="form-group mt-3 border p-3 mb-3">
+            <div className="form-group mt-3 border rounded p-3 mb-3">
               <label htmlFor="typeRepsX" className="form-label">
                 Maaşınızı Giriniz
               </label>
@@ -27,7 +28,7 @@ function Maas3() {
                 Save
               </button>
             </div>
-            <div className="border p-3 mb-3">
+            <div className="border rounded p-3 mb-3">
               <div className="form-group mt-3">
                 <label htmlFor="typeTitleX" className="form-label">
                   Harcama
@@ -113,17 +114,22 @@ function Maas3() {
         <div className="col-md-9">
           <div className="d-flex justify-content-between align-items-center">
             <h3>Harcama Tablosu</h3>
-            <h4 className="btn btn-info disabled ">
+            <h4
+              className="btn btn-info d-flex justify-content-center align-items-center "
+              data-bs-toggle="modal"
+              data-bs-target="#maasEditModal"
+            >
               Toplam Maaş Miktarı: 25000
+              <FaPen className="ms-2" />
             </h4>
           </div>
           <ul className="list-group mt-3">
             <li className="list-group-item d-flex justify-content-between align-items-center">
               <table class="table">
                 <th>Harcama</th>
-                <th>İhtiyaç</th>
-                <th>Yatırım</th>
-                <th>Lüks</th>
+                <th>İhtiyaç: 12500</th>
+                <th>Yatırım: 5000</th>
+                <th>Lüks: 7500</th>
                 <th>Aksiyon</th>
                 <tbody>
                   <tr>
@@ -135,7 +141,7 @@ function Maas3() {
                       <button
                         className="btn btn-warning me-2 text-white"
                         data-bs-toggle="modal"
-                        data-bs-target="#exampleModal"
+                        data-bs-target="#editModal"
                       >
                         Edit
                       </button>
@@ -170,15 +176,15 @@ function Maas3() {
       {/* Edit Modal */}
       <div
         className="modal fade"
-        id="exampleModal"
+        id="editModal"
         tabIndex="-1"
-        aria-labelledby="exampleModalLabel"
+        aria-labelledby="editModalLabel"
         aria-hidden="true"
       >
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h1 className="modal-title fs-5" id="exampleModalLabel">
+              <h1 className="modal-title fs-5" id="editModalLabel">
                 Harcama Düzenleme
               </h1>
               <button
@@ -266,6 +272,46 @@ function Maas3() {
               </button>
               <button type="button" className="btn btn-success">
                 Evet
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* Maaş Düzenleme Modal */}
+      <div
+        className="modal fade"
+        id="maasEditModal"
+        tabIndex="-1"
+        aria-labelledby="maasEditLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="maasEditLabel">
+                Maaş Düzenleme
+              </h1>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="modal-body">
+              <div className="form-group">
+                <input
+                  type="number"
+                  className="form-control"
+                  id="editMaas"
+                  placeholder="Maas"
+                  required
+                />
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-primary">
+                Kaydet
               </button>
             </div>
           </div>

@@ -28,4 +28,14 @@ router.post("/", async (req, res) => {
   }
 })
 
+// Tüm maaşları getir
+router.get("/", async (req, res) => {
+  try {
+    const maaslar = await Maas3.find()
+    res.json(maaslar)
+  } catch (err) {
+    res.status(500).json({ message: err.message })
+  }
+})
+
 module.exports = router

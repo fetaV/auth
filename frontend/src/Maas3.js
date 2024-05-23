@@ -10,6 +10,7 @@ function Maas3() {
   const [newMaas, setNewMaas] = useState("")
   const [miktar, setMiktar] = useState("")
   const [harcama, setHarcama] = useState("")
+  const [harcamalar, setHarcamalar] = useState([])
   const [maasToEdit, setMaasToEdit] = useState(null)
   const [selectedOption, setSelectedOption] = useState(
     "Harcama seçeneği seçiniz"
@@ -35,7 +36,7 @@ function Maas3() {
     setSelectedOption(option)
   }
 
-  const handleSubmit2 = async e => {
+  const parasalDuzenlemeler = async e => {
     e.preventDefault()
 
     let kullanimTipi
@@ -79,6 +80,18 @@ function Maas3() {
         },
       })
       .then(res => setMaaslar(res.data))
+      .catch(err => console.error(err))
+
+    axios
+      .get("/api/maas3", {
+        headers: {
+          Authorization: token,
+        },
+      })
+      .then(res => {
+        console.log(res)
+        setHarcamalar(res.data)
+      })
       .catch(err => console.error(err))
   }, [])
 
@@ -211,7 +224,7 @@ function Maas3() {
                 </div>
                 <button
                   type="submit"
-                  onClick={handleSubmit2}
+                  onClick={parasalDuzenlemeler}
                   className="btn btn-primary mt-3"
                 >
                   Save
@@ -249,12 +262,40 @@ function Maas3() {
                   </tr>
                 </thead>
                 <tbody>
-                  {maaslar.map((maas, index) => (
+                  {harcamalar.map((harcama, index) => (
                     <tr key={index}>
-                      <td data-title="Harcama Seçeneği">Eğlence</td>
-                      <td data-title="İhtiyaç"></td>
-                      <td data-title="Yatırım"></td>
-                      <td data-title="Lüks"></td>
+                      <td data-title="Harcama Seçeneği">{harcama.aciklama}</td>
+                      {harcama.kullanim === 0 ? (
+                        <>
+                          <td data-title="İhtiyaç">{harcama.miktar}</td>
+                          <td data-title="Yatırım" className="text-danger">
+                            <b>0</b>
+                          </td>
+                          <td data-title="Lüks" className="text-danger">
+                            <b>0</b>
+                          </td>
+                        </>
+                      ) : harcama.kullanim === 1 ? (
+                        <>
+                          <td data-title="İhtiyaç" className="text-danger">
+                            <b>0</b>
+                          </td>
+                          <td data-title="Yatırım">{harcama.miktar}</td>
+                          <td data-title="Lüks" className="text-danger">
+                            <b>0</b>
+                          </td>
+                        </>
+                      ) : (
+                        <>
+                          <td data-title="İhtiyaç" className="text-danger">
+                            <b>0</b>
+                          </td>
+                          <td data-title="Yatırım" className="text-danger">
+                            <b>0</b>
+                          </td>
+                          <td data-title="Lüks">{harcama.miktar}</td>
+                        </>
+                      )}
                       <td data-title="Aksiyon">
                         <button
                           className="btn btn-warning me-2 text-white"

@@ -17,11 +17,30 @@ const verifyToken = (req, res, next) => {
   })
 }
 
-// Tüm maaşları getir
+// Maaş getir
 router.get("/", verifyToken, async (req, res) => {
   try {
     const maaslar = await Maas.find()
     res.json(maaslar)
+  } catch (err) {
+    res.status(500).json({ message: err.message })
+  }
+})
+
+//Maaş düzenle
+app.put("/:id", async (req, res) => {
+  try {
+    const updatedMaas = await Maas.findByIdAndUpdate(
+      req.params.id,
+      {
+        maasMiktari: req.body.maasMiktari,
+      },
+      { new: true }
+    )
+    if (!updatedMaas) {
+      return res.status(404).json({ message: "Maaş bulunamadı" })
+    }
+    res.json(updatedMaas)
   } catch (err) {
     res.status(500).json({ message: err.message })
   }

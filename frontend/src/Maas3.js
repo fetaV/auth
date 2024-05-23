@@ -10,9 +10,15 @@ function Maas3() {
   const [newMaas, setNewMaas] = useState("")
   const [miktar, setMiktar] = useState("")
   const [harcama, setHarcama] = useState("")
+  const [modalMiktar, setModalMiktar] = useState("")
+  const [modalHarcama, setModalHarcama] = useState("")
+  const [modalKullanim, setModalKullanim] = useState()
   const [harcamalar, setHarcamalar] = useState([])
   const [maasToEdit, setMaasToEdit] = useState(null)
   const [selectedOption, setSelectedOption] = useState(
+    "Harcama seçeneği seçiniz"
+  )
+  const [selectedOptionModal, setSelectedOptionModal] = useState(
     "Harcama seçeneği seçiniz"
   )
 
@@ -32,8 +38,19 @@ function Maas3() {
     0
   )
 
+  const handleEditModalOpen = userId => {
+    const modalEdit = harcamalar.find(modal => modal._id === userId)
+    setModalMiktar(modalEdit.miktar)
+    setModalHarcama(modalEdit.aciklama)
+    setModalKullanim(modalEdit.kullanim)
+    console.log(modalEdit)
+  }
+
   const handleOptionSelect = option => {
     setSelectedOption(option)
+  }
+  const handleOptionSelectModal = option => {
+    setSelectedOptionModal(option)
   }
 
   const parasalDuzenlemeler = async e => {
@@ -301,6 +318,7 @@ function Maas3() {
                           className="btn btn-warning me-2 text-white"
                           data-bs-toggle="modal"
                           data-bs-target="#editModal"
+                          onClick={() => handleEditModalOpen(harcama._id)}
                         >
                           Edit
                         </button>
@@ -355,54 +373,80 @@ function Maas3() {
               ></button>
             </div>
             <div className="modal-body">
-              <div className="form-group mt-3">
-                <label htmlFor="editIhtiyac" className="form-label">
-                  Harcama
-                </label>
-                <input
-                  type="number"
-                  className="form-control"
-                  id="editHarcama"
-                  placeholder="Harcama yeri giriniz"
-                  required
-                />
-              </div>
-              <div className="form-group mt-3">
-                <label htmlFor="editIhtiyac" className="form-label">
-                  İhtiyaç
-                </label>
-                <input
-                  type="number"
-                  className="form-control"
-                  id="editIhtiyac"
-                  placeholder="İhtiyac"
-                  required
-                />
-              </div>
-              <div className="form-group mt-3">
-                <label htmlFor="editReps" className="form-label">
-                  Yatirim
-                </label>
-                <input
-                  type="number"
-                  className="form-control"
-                  id="editYatirim"
-                  placeholder="Yatirim"
-                  required
-                />
-              </div>
-              <div className="form-group mt-3">
-                <label htmlFor="editLuks" className="form-label">
-                  Luks
-                </label>
-                <input
-                  type="number"
-                  className="form-control"
-                  id="editLuks"
-                  placeholder="Luks"
-                  required
-                />
-              </div>
+              <form>
+                <div className="form-group mt-3">
+                  <label htmlFor="harcama" className="form-label">
+                    Harcama
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="harcama"
+                    value={modalHarcama}
+                    onChange={e => setModalHarcama(e.target.value)}
+                    placeholder="Harcanan yeri giriniz"
+                    required
+                  />
+                </div>
+                <div className="form-group mt-3">
+                  <label htmlFor="typeTitleX" className="form-label">
+                    Kullanım
+                  </label>
+                  <div className="dropdown">
+                    <button
+                      className="btn btn-secondary dropdown-toggle w-100 text-start"
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      {selectedOptionModal}
+                    </button>
+                    <ul className="dropdown-menu w-100">
+                      <li>
+                        <a
+                          className="dropdown-item"
+                          href="#"
+                          onClick={() => handleOptionSelectModal("İhtiyaç")}
+                        >
+                          İhtiyaç
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          className="dropdown-item"
+                          href="#"
+                          onClick={() => handleOptionSelectModal("Yatırım")}
+                        >
+                          Yatırım
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          className="dropdown-item"
+                          href="#"
+                          onClick={() => handleOptionSelectModal("Lüks")}
+                        >
+                          Lüks
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div className="form-group mt-3">
+                  <label htmlFor="miktar" className="form-label">
+                    Miktar
+                  </label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    id="miktar"
+                    value={modalMiktar}
+                    onChange={e => setModalMiktar(e.target.value)}
+                    placeholder="Miktar"
+                    required
+                  />
+                </div>
+              </form>
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-primary">

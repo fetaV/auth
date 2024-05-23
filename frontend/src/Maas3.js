@@ -59,8 +59,6 @@ function Maas3() {
   }
 
   const handleDeleteModalOpen = userId => {
-    const modalEdit = harcamalar.find(modal => modal._id === userId)
-    console.log(modalEdit)
     setDeleteId(userId)
   }
 

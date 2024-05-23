@@ -38,4 +38,22 @@ router.get("/", async (req, res) => {
   }
 })
 
+// Harcama sil
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params
+
+  try {
+    const harcama = await Maas3.findByIdAndDelete(id)
+
+    if (!harcama) {
+      return res.status(404).json({ message: "Harcama bulunamadı" })
+    }
+
+    console.log("Harcama silindi:", harcama)
+    res.status(204).end()
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+})
+
 module.exports = router

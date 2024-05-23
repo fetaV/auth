@@ -15,6 +15,7 @@ function Maas3() {
   const [modalKullanim, setModalKullanim] = useState()
   const [harcamalar, setHarcamalar] = useState([])
   const [maasToEdit, setMaasToEdit] = useState(null)
+  const [deleteId, setDeleteId] = useState(null)
   const [selectedOption, setSelectedOption] = useState(
     "Harcama seçeneği seçiniz"
   )
@@ -55,6 +56,12 @@ function Maas3() {
     }
     setSelectedOptionModal(kullanimText)
     console.log(modalEdit)
+  }
+
+  const handleDeleteModalOpen = userId => {
+    const modalEdit = harcamalar.find(modal => modal._id === userId)
+    console.log(modalEdit)
+    setDeleteId(userId)
   }
 
   const handleOptionSelect = option => {
@@ -98,6 +105,12 @@ function Maas3() {
     try {
       const response = await axios.post("/api/maas3", data)
       console.log("Response data:", response.data) // Log eklendi
+      setHarcamalar([...harcamalar, response.data])
+      toast.success("Harcama eklendi!")
+      setHarcama("")
+      setMiktar("")
+      setSelectedOption("Harcama seçeneği seçiniz")
+
       // Başarılı kayıttan sonra yapılacak işlemler
     } catch (error) {
       console.error("Error saving the data", error)
@@ -153,6 +166,26 @@ function Maas3() {
       setMaasMiktari("")
     } catch (err) {
       console.error(err)
+    }
+  }
+
+  const handleDelete = async userId => {
+    try {
+      console.log("Silinecek ID:", userId) // Debugging için ID'yi yazdır
+      const token = localStorage.getItem("token")
+      await axios.delete(`/api/maas3/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Bearer eklenerek token gönderimi düzeltildi
+        },
+      })
+      setHarcamalar(harcamalar.filter(harcama => harcama._id !== userId))
+      toast.success("Harcama başarıyla silindi!")
+    } catch (error) {
+      console.error(
+        "Hata mesajı:",
+        error.response?.data?.message || error.message
+      )
+      toast.error("Harcama silinirken bir hata oluştu.")
     }
   }
 
@@ -348,6 +381,7 @@ function Maas3() {
                           className="btn btn-danger"
                           data-bs-toggle="modal"
                           data-bs-target="#deleteModal"
+                          onClick={() => handleDeleteModalOpen(harcama._id)}
                         >
                           Delete
                         </button>
@@ -518,7 +552,11 @@ function Maas3() {
               >
                 Hayır
               </button>
-              <button type="button" className="btn btn-success">
+              <button
+                type="button"
+                className="btn btn-success"
+                onClick={() => handleDelete(deleteId)}
+              >
                 Evet
               </button>
             </div>

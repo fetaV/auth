@@ -25,24 +25,35 @@ function Maas3() {
   const yatirimMiktari = maaslar.length > 0 ? maaslar[0].maasMiktari * 0.2 : ""
   const luksMiktari = maaslar.length > 0 ? maaslar[0].maasMiktari * 0.3 : ""
   const ihtiyacMiktari = maaslar.length > 0 ? maaslar[0].maasMiktari * 0.5 : ""
-  const toplamYatirim = maaslar.reduce(
-    (total, maas) => total + (maas.yatirim || 0),
-    0
-  )
-  const toplamLuks = maaslar.reduce(
-    (total, maas) => total + (maas.luks || 0),
-    0
-  )
-  const toplamIhtiyac = maaslar.reduce(
-    (total, maas) => total + (maas.ihtiyac || 0),
-    0
-  )
+
+  const toplamIhtiyac = harcamalar
+    .filter(harcama => harcama.kullanim === 0)
+    .reduce((acc, harcama) => acc + harcama.miktar, 0)
+
+  const toplamYatirim = harcamalar
+    .filter(harcama => harcama.kullanim === 1)
+    .reduce((acc, harcama) => acc + harcama.miktar, 0)
+
+  const toplamLuks = harcamalar
+    .filter(harcama => harcama.kullanim === 2)
+    .reduce((acc, harcama) => acc + harcama.miktar, 0)
 
   const handleEditModalOpen = userId => {
     const modalEdit = harcamalar.find(modal => modal._id === userId)
     setModalMiktar(modalEdit.miktar)
     setModalHarcama(modalEdit.aciklama)
     setModalKullanim(modalEdit.kullanim)
+
+    // Kullanım değerini belirlemek için
+    let kullanimText
+    if (modalEdit.kullanim === 0) {
+      kullanimText = "İhtiyaç"
+    } else if (modalEdit.kullanim === 1) {
+      kullanimText = "Yatırım"
+    } else if (modalEdit.kullanim === 2) {
+      kullanimText = "Lüks"
+    }
+    setSelectedOptionModal(kullanimText)
     console.log(modalEdit)
   }
 
@@ -51,6 +62,17 @@ function Maas3() {
   }
   const handleOptionSelectModal = option => {
     setSelectedOptionModal(option)
+
+    // Kullanım değerini belirlemek için
+    let kullanimValue
+    if (option === "İhtiyaç") {
+      kullanimValue = 0
+    } else if (option === "Yatırım") {
+      kullanimValue = 1
+    } else if (option === "Lüks") {
+      kullanimValue = 2
+    }
+    setModalKullanim(kullanimValue)
   }
 
   const parasalDuzenlemeler = async e => {
@@ -141,7 +163,7 @@ function Maas3() {
       <div className="row">
         <div className="col-md-3">
           <h3>Parasal Düzenlemeler</h3>
-          <form>
+          <form className="mt-3">
             {!maaslar.some(maas => maas.maasMiktari) && (
               <div className="form-group mt-3 border rounded p-3 mb-3">
                 <label htmlFor="typeRepsX" className="form-label">
@@ -266,7 +288,7 @@ function Maas3() {
               </h4>
             ))}
           </div>
-          <ul className="list-group mt-3">
+          <ul className="list-group mt-1">
             <li className="list-group-item d-flex justify-content-between align-items-center">
               <table className="table">
                 <thead>
@@ -333,16 +355,26 @@ function Maas3() {
                     </tr>
                   ))}
                   <tr>
-                    <td>Toplam Harcanan Tutar</td>
-                    <td>{toplamIhtiyac}</td>
-                    <td>{toplamYatirim}</td>
-                    <td>{toplamLuks}</td>
+                    <td>
+                      <b>Toplam Harcanan Tutar</b>
+                    </td>
+                    <td data-title="İhtiyaç">{toplamIhtiyac}</td>
+                    <td data-title="Yatırım">{toplamYatirim}</td>
+                    <td data-title="Lüks">{toplamLuks}</td>
                   </tr>
                   <tr>
-                    <td>Kalan Tutar</td>
-                    <td>{ihtiyacMiktari - toplamIhtiyac}</td>
-                    <td>{yatirimMiktari - toplamYatirim}</td>
-                    <td>{luksMiktari - toplamLuks}</td>
+                    <td>
+                      <b>Kalan Tutar</b>
+                    </td>
+                    <td data-title="Kalan İhtiyaç Tutarı">
+                      {ihtiyacMiktari - toplamIhtiyac}
+                    </td>
+                    <td data-title="Kalan Yatırım Tutarı">
+                      {yatirimMiktari - toplamYatirim}
+                    </td>
+                    <td data-title="Kalan Lüks Tutarı">
+                      {luksMiktari - toplamLuks}
+                    </td>
                   </tr>
                 </tbody>
               </table>

@@ -178,6 +178,9 @@ function Maas3() {
       })
       setHarcamalar(harcamalar.filter(harcama => harcama._id !== userId))
       toast.success("Harcama başarıyla silindi!")
+      setTimeout(() => {
+        window.location.reload()
+      }, 500)
     } catch (error) {
       console.error(
         "Hata mesajı:",

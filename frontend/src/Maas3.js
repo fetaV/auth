@@ -15,6 +15,7 @@ function Maas3() {
   const [modalKullanim, setModalKullanim] = useState()
   const [harcamalar, setHarcamalar] = useState([])
   const [maasToEdit, setMaasToEdit] = useState(null)
+  const [harcamaToEdit, setHarcamaToEdit] = useState(null)
   const [deleteId, setDeleteId] = useState(null)
   const [selectedOption, setSelectedOption] = useState(
     "Harcama seçeneği seçiniz"
@@ -44,8 +45,8 @@ function Maas3() {
     setModalMiktar(modalEdit.miktar)
     setModalHarcama(modalEdit.aciklama)
     setModalKullanim(modalEdit.kullanim)
+    setHarcamaToEdit(modalEdit) // Düzenlenecek harcamayı belirle
 
-    // Kullanım değerini belirlemek için
     let kullanimText
     if (modalEdit.kullanim === 0) {
       kullanimText = "İhtiyaç"
@@ -144,6 +145,41 @@ function Maas3() {
     } catch (error) {
       console.error(error.response.data)
       toast.error(error.response.data.message)
+    }
+  }
+
+  const handleEditHarcamaSave = async () => {
+    if (!harcamaToEdit) {
+      console.error("harcamaToEdit is not set")
+      return
+    }
+
+    try {
+      const token = localStorage.getItem("token")
+      const data = {
+        aciklama: modalHarcama,
+        kullanim: modalKullanim,
+        miktar: parseInt(modalMiktar, 10),
+      }
+
+      const response = await axios.put(
+        `/api/maas3/${harcamaToEdit._id}`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      setHarcamalar(
+        harcamalar.map(harcama =>
+          harcama._id === harcamaToEdit._id ? response.data : harcama
+        )
+      )
+      toast.success("Harcama başarıyla güncellendi!")
+    } catch (error) {
+      console.error(error.response.data)
+      toast.error("Harcama güncellenirken bir hata oluştu.")
     }
   }
 
@@ -543,7 +579,11 @@ function Maas3() {
               </form>
             </div>
             <div className="modal-footer">
-              <button type="button" className="btn btn-primary">
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={handleEditHarcamaSave}
+              >
                 Kaydet
               </button>
             </div>

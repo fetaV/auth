@@ -4,7 +4,7 @@ const express = require("express")
 const router = express.Router()
 const Maas3 = require("../models/Maas3")
 
-// Yeni maaş kaydı oluşturma
+// Yeni harcama kaydı oluşturma
 router.post("/", async (req, res) => {
   try {
     console.log("POST request received") // Log eklendi
@@ -28,7 +28,7 @@ router.post("/", async (req, res) => {
   }
 })
 
-// Tüm maaşları getir
+// Tüm harcamaları getir
 router.get("/", async (req, res) => {
   try {
     const maaslar = await Maas3.find()
@@ -51,6 +51,29 @@ router.delete("/:id", async (req, res) => {
 
     console.log("Harcama silindi:", harcama)
     res.status(204).end()
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+})
+
+// Harcama düzenle
+router.put("/:id", async (req, res) => {
+  const { id } = req.params
+  const { aciklama, kullanim, miktar } = req.body
+
+  try {
+    const updatedHarcama = await Maas3.findByIdAndUpdate(
+      id,
+      { aciklama, kullanim, miktar },
+      { new: true } // Bu, güncellenmiş veriyi geri döndürür
+    )
+
+    if (!updatedHarcama) {
+      return res.status(404).json({ message: "Harcama düzenlenemedi" })
+    }
+
+    console.log("Harcama düzenlendi:", updatedHarcama)
+    res.json(updatedHarcama)
   } catch (error) {
     res.status(500).json({ message: error.message })
   }

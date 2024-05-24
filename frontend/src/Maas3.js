@@ -119,6 +119,33 @@ function Maas3() {
     setMaasToEdit(maas) // Düzenlenecek maaşı belirle
     setNewMaas(maas.maasMiktari) // Modal içindeki input değerini belirle
   }
+  const handleEditMaasSave = async () => {
+    if (!maasToEdit) {
+      console.error("maasToEdit is not set")
+      return
+    }
+
+    try {
+      const token = localStorage.getItem("token")
+      const response = await axios.put(
+        `/api/maas/${maasToEdit._id}`, // Kullanıcı ID'si yerine maaş ID'si kullanılıyor
+        { maasMiktari: newMaas },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      toast.success("User updated successfully!")
+      console.log("User information:", response.data)
+      setTimeout(() => {
+        window.location.reload()
+      }, 500)
+    } catch (error) {
+      console.error(error.response.data)
+      toast.error(error.response.data.message)
+    }
+  }
 
   useEffect(() => {
     const token = localStorage.getItem("token")
@@ -599,7 +626,11 @@ function Maas3() {
               </div>
             </div>
             <div className="modal-footer">
-              <button type="button" className="btn btn-primary">
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={handleEditMaasSave}
+              >
                 Kaydet
               </button>
             </div>

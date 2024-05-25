@@ -177,6 +177,9 @@ function Maas3() {
         )
       )
       toast.success("Harcama başarıyla güncellendi!")
+      setTimeout(() => {
+        window.location.reload()
+      }, 500)
     } catch (error) {
       console.error(error.response.data)
       toast.error("Harcama güncellenirken bir hata oluştu.")

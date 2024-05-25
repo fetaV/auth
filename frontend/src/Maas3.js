@@ -102,12 +102,7 @@ function Maas3() {
     console.log("Data to be sent:", data) // Log eklendi
 
     try {
-      const token = localStorage.getItem("token")
-      const response = await axios.post("/api/maas3", data, {
-        headers: {
-          Authorization: `Bearer ${token}`, // Yetkilendirme bilgisini ekledik
-        },
-      })
+      const response = await axios.post("/api/maas3", data)
       console.log("Response data:", response.data) // Log eklendi
       setHarcamalar([...harcamalar, response.data])
       toast.success("Harcama eklendi!")
@@ -115,7 +110,6 @@ function Maas3() {
       setMiktar("")
       setSelectedOption("Harcama seçeneği seçiniz")
 
-      console.log("response", response)
       // Başarılı kayıttan sonra yapılacak işlemler
     } catch (error) {
       console.error("Error saving the data", error)

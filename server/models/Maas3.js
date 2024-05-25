@@ -9,6 +9,11 @@ const MaasSchema = new mongoose.Schema({
     enum: [0, 1, 2], // 0: İhtiyaç, 1: Yatırım, 2: Lüks
   },
   miktar: Number,
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
 })
 
 module.exports = mongoose.model("Maas3", MaasSchema)

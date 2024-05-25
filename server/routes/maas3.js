@@ -2,21 +2,37 @@
 
 const express = require("express")
 const router = express.Router()
+const jwt = require("jsonwebtoken")
 const Maas3 = require("../models/Maas3")
+const User = require("../models/User")
+
+// Middleware: JWT doğrulama
+const verifyToken = (req, res, next) => {
+  const token = req.headers.authorization
+  if (!token) return res.status(403).send("Token required")
+  jwt.verify(token, process.env.SECRET, (err, decoded) => {
+    if (err) return res.status(401).send("Invalid token")
+    req.user = decoded
+    next()
+  })
+}
 
 // Yeni harcama kaydı oluşturma
-router.post("/", async (req, res) => {
+router.post("/", verifyToken, async (req, res) => {
   try {
     const { aciklama, kullanim, miktar } = req.body
+    const user = await User.findOne({ email: req.user.email }) // Kullanıcı bilgileri alındı
 
     const newMaas = new Maas3({
       aciklama,
       kullanim,
       miktar,
+      user: user._id, // ObjectId kullanıldı
     })
+    console.log(newMaas)
 
-    const savedMaas = await newMaas.save()
-    res.status(201).json(savedMaas)
+    await newMaas.save()
+    res.status(201).json(newMaas)
   } catch (error) {
     console.error("Error saving data:", error) // Log eklendi
     res.status(500).json({ error: "Failed to save the data" })
@@ -24,12 +40,13 @@ router.post("/", async (req, res) => {
 })
 
 // Tüm harcamaları getir
-router.get("/", async (req, res) => {
+router.get("/", verifyToken, async (req, res) => {
   try {
-    const maaslar = await Maas3.find()
-    res.json(maaslar)
+    const user = await User.findOne({ email: req.user.email }) // Kullanıcı bilgileri alındı
+    const harcamalar = await Maas3.find({ user: user._id }) // ObjectId kullanıldı
+    res.status(200).json(harcamalar)
   } catch (err) {
-    res.status(500).json({ message: err.message })
+    res.status(500).send({ message: err.message })
   }
 })
 

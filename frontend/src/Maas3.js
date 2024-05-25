@@ -102,7 +102,13 @@ function Maas3() {
     console.log("Data to be sent:", data) // Log eklendi
 
     try {
-      const response = await axios.post("/api/maas3", data)
+      const token = localStorage.getItem("token")
+
+      const response = await axios.post("/api/maas3", data, {
+        headers: {
+          Authorization: token,
+        },
+      })
       console.log("Response data:", response.data) // Log eklendi
       setHarcamalar([...harcamalar, response.data])
       toast.success("Harcama eklendi!")
@@ -133,7 +139,7 @@ function Maas3() {
         { maasMiktari: newMaas },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: token,
           },
         }
       )
@@ -167,7 +173,7 @@ function Maas3() {
         data,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: token,
           },
         }
       )
@@ -239,7 +245,7 @@ function Maas3() {
       const token = localStorage.getItem("token")
       await axios.delete(`/api/maas3/${userId}`, {
         headers: {
-          Authorization: `Bearer ${token}`, // Bearer eklenerek token gönderimi düzeltildi
+          Authorization: token, // Bearer eklenerek token gönderimi düzeltildi
         },
       })
       setHarcamalar(harcamalar.filter(harcama => harcama._id !== userId))

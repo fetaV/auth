@@ -245,7 +245,7 @@ function Maas3() {
       const token = localStorage.getItem("token")
       await axios.delete(`/api/maas3/${userId}`, {
         headers: {
-          Authorization: token, // Bearer eklenerek token gönderimi düzeltildi
+          Authorization: token,
         },
       })
       setHarcamalar(harcamalar.filter(harcama => harcama._id !== userId))

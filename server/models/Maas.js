@@ -4,9 +4,6 @@ const mongoose = require("mongoose")
 
 const MaasSchema = new mongoose.Schema({
   maasMiktari: Number,
-  yatirim: Number,
-  luks: Number,
-  ihtiyac: Number,
   tarih: {
     type: Date,
     default: Date.now,

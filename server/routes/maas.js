@@ -20,7 +20,8 @@ const verifyToken = (req, res, next) => {
 // Maaş getir
 router.get("/", verifyToken, async (req, res) => {
   try {
-    const maaslar = await Maas.find()
+    const user = await User.findOne({ email: req.user.email }) // Kullanıcı bilgileri alındı
+    const maaslar = await Maas.find({ user: user._id })
     res.json(maaslar)
   } catch (err) {
     res.status(500).json({ message: err.message })
@@ -49,17 +50,17 @@ router.put("/:id", async (req, res) => {
 // Yeni maaş ekle
 router.post("/", verifyToken, async (req, res) => {
   try {
-    const user = await User.findOne({ email: req.user.email })
-
     const maasMiktari = req.body.maasMiktari
+    const user = await User.findOne({ email: req.user.email })
 
     const maas = new Maas({
       maasMiktari,
       user: user._id,
     })
+    console.log("maas", maas)
 
-    const yeniMaas = await maas.save()
-    res.status(201).json(yeniMaas)
+    await maas.save()
+    res.status(201).json(maas)
   } catch (err) {
     res.status(400).json({ message: err.message })
   }

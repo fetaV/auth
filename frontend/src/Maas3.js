@@ -324,31 +324,28 @@ function Maas3() {
                     </button>
                     <ul className="dropdown-menu w-100">
                       <li>
-                        <a
+                        <div
                           className="dropdown-item"
-                          href="#"
                           onClick={() => handleOptionSelect("İhtiyaç")}
                         >
                           İhtiyaç
-                        </a>
+                        </div>
                       </li>
                       <li>
-                        <a
+                        <div
                           className="dropdown-item"
-                          href="#"
                           onClick={() => handleOptionSelect("Yatırım")}
                         >
                           Yatırım
-                        </a>
+                        </div>
                       </li>
                       <li>
-                        <a
+                        <div
                           className="dropdown-item"
-                          href="#"
                           onClick={() => handleOptionSelect("Lüks")}
                         >
                           Lüks
-                        </a>
+                        </div>
                       </li>
                     </ul>
                   </div>
@@ -542,31 +539,28 @@ function Maas3() {
                     </button>
                     <ul className="dropdown-menu w-100">
                       <li>
-                        <a
+                        <div
                           className="dropdown-item"
-                          href="#"
                           onClick={() => handleOptionSelectModal("İhtiyaç")}
                         >
                           İhtiyaç
-                        </a>
+                        </div>
                       </li>
                       <li>
-                        <a
+                        <div
                           className="dropdown-item"
-                          href="#"
                           onClick={() => handleOptionSelectModal("Yatırım")}
                         >
                           Yatırım
-                        </a>
+                        </div>
                       </li>
                       <li>
-                        <a
+                        <div
                           className="dropdown-item"
-                          href="#"
                           onClick={() => handleOptionSelectModal("Lüks")}
                         >
                           Lüks
-                        </a>
+                        </div>
                       </li>
                     </ul>
                   </div>

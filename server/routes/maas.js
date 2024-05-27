@@ -30,17 +30,19 @@ router.get("/", verifyToken, async (req, res) => {
 
 //Maaş düzenle
 router.put("/:id", async (req, res) => {
+  const { id } = req.params
+  const { maasMiktari } = req.body
+
   try {
     const updatedMaas = await Maas.findByIdAndUpdate(
-      req.params.id,
-      {
-        maasMiktari: req.body.maasMiktari,
-      },
+      id,
+      { maasMiktari },
       { new: true }
     )
     if (!updatedMaas) {
       return res.status(404).json({ message: "Maaş bulunamadı" })
     }
+    console.log("Harcama düzenlendi:", updatedMaas)
     res.json(updatedMaas)
   } catch (err) {
     res.status(500).json({ message: err.message })
@@ -57,7 +59,6 @@ router.post("/", verifyToken, async (req, res) => {
       maasMiktari,
       user: user._id,
     })
-    console.log("maas", maas)
 
     await maas.save()
     res.status(201).json(maas)

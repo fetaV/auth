@@ -10,8 +10,8 @@ const MaasSchema = new mongoose.Schema({
   },
   miktar: Number,
   user: {
-    type: mongoose.Schema.Types.ObjectId, // ObjectId türünde yapıldı
-    ref: "User", // Referans modeli belirtildi (varsayılan olarak 'User')
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
     required: true,
   },
 })

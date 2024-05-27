@@ -4,7 +4,7 @@ const express = require("express")
 const router = express.Router()
 const jwt = require("jsonwebtoken")
 const User = require("../models/User")
-const Maas = require("../models/Maas") // Maas modeli eklendi
+const Maas = require("../models/Maas")
 
 // Middleware: JWT doğrulama
 const verifyToken = (req, res, next) => {
@@ -20,7 +20,7 @@ const verifyToken = (req, res, next) => {
 // Maaş getir
 router.get("/", verifyToken, async (req, res) => {
   try {
-    const user = await User.findOne({ email: req.user.email }) // Kullanıcı bilgileri alındı
+    const user = await User.findOne({ email: req.user.email })
     const maaslar = await Maas.find({ user: user._id })
     res.json(maaslar)
   } catch (err) {
@@ -42,7 +42,6 @@ router.put("/:id", async (req, res) => {
     if (!updatedMaas) {
       return res.status(404).json({ message: "Maaş bulunamadı" })
     }
-    console.log("Harcama düzenlendi:", updatedMaas)
     res.json(updatedMaas)
   } catch (err) {
     res.status(500).json({ message: err.message })

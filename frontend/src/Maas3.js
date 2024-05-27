@@ -45,7 +45,7 @@ function Maas3() {
     setModalMiktar(modalEdit.miktar)
     setModalHarcama(modalEdit.aciklama)
     setModalKullanim(modalEdit.kullanim)
-    setHarcamaToEdit(modalEdit) // Düzenlenecek harcamayı belirle
+    setHarcamaToEdit(modalEdit)
 
     let kullanimText
     if (modalEdit.kullanim === 0) {
@@ -56,7 +56,6 @@ function Maas3() {
       kullanimText = "Lüks"
     }
     setSelectedOptionModal(kullanimText)
-    console.log(modalEdit)
   }
 
   const handleDeleteModalOpen = userId => {
@@ -69,7 +68,6 @@ function Maas3() {
   const handleOptionSelectModal = option => {
     setSelectedOptionModal(option)
 
-    // Kullanım değerini belirlemek için
     let kullanimValue
     if (option === "İhtiyaç") {
       kullanimValue = 0
@@ -99,8 +97,6 @@ function Maas3() {
       miktar: parseInt(miktar, 10),
     }
 
-    console.log("Data to be sent:", data) // Log eklendi
-
     try {
       const token = localStorage.getItem("token")
 
@@ -109,22 +105,19 @@ function Maas3() {
           Authorization: token,
         },
       })
-      console.log("Response data:", response.data) // Log eklendi
       setHarcamalar([...harcamalar, response.data])
       toast.success("Harcama eklendi!")
       setHarcama("")
       setMiktar("")
       setSelectedOption("Harcama seçeneği seçiniz")
-
-      // Başarılı kayıttan sonra yapılacak işlemler
     } catch (error) {
       console.error("Error saving the data", error)
     }
   }
 
   const handleEditMaas = maas => {
-    setMaasToEdit(maas) // Düzenlenecek maaşı belirle
-    setNewMaas(maas.maasMiktari) // Modal içindeki input değerini belirle
+    setMaasToEdit(maas)
+    setNewMaas(maas.maasMiktari)
   }
   const handleEditMaasSave = async () => {
     if (!maasToEdit) {
@@ -135,7 +128,7 @@ function Maas3() {
     try {
       const token = localStorage.getItem("token")
       const response = await axios.put(
-        `/api/maas/${maasToEdit._id}`, // Kullanıcı ID'si yerine maaş ID'si kullanılıyor
+        `/api/maas/${maasToEdit._id}`,
         { maasMiktari: newMaas },
         {
           headers: {
@@ -144,7 +137,6 @@ function Maas3() {
         }
       )
       toast.success("User updated successfully!")
-      console.log("User information:", response.data)
       setTimeout(() => {
         window.location.reload()
       }, 500)
@@ -211,7 +203,6 @@ function Maas3() {
         },
       })
       .then(res => {
-        console.log(res)
         setHarcamalar(res.data)
       })
       .catch(err => console.error(err))
@@ -241,7 +232,6 @@ function Maas3() {
 
   const handleDelete = async userId => {
     try {
-      console.log("Silinecek ID:", userId) // Debugging için ID'yi yazdır
       const token = localStorage.getItem("token")
       await axios.delete(`/api/maas3/${userId}`, {
         headers: {

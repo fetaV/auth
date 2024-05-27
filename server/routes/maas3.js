@@ -21,20 +21,19 @@ const verifyToken = (req, res, next) => {
 router.post("/", verifyToken, async (req, res) => {
   try {
     const { aciklama, kullanim, miktar } = req.body
-    const user = await User.findOne({ email: req.user.email }) // Kullanıcı bilgileri alındı
+    const user = await User.findOne({ email: req.user.email })
 
     const newMaas = new Maas3({
       aciklama,
       kullanim,
       miktar,
-      user: user._id, // ObjectId kullanıldı
+      user: user._id,
     })
-    console.log(newMaas)
 
     await newMaas.save()
     res.status(201).json(newMaas)
   } catch (error) {
-    console.error("Error saving data:", error) // Log eklendi
+    console.error("Error saving data:", error)
     res.status(500).json({ error: "Failed to save the data" })
   }
 })
@@ -42,8 +41,8 @@ router.post("/", verifyToken, async (req, res) => {
 // Tüm harcamaları getir
 router.get("/", verifyToken, async (req, res) => {
   try {
-    const user = await User.findOne({ email: req.user.email }) // Kullanıcı bilgileri alındı
-    const harcamalar = await Maas3.find({ user: user._id }) // ObjectId kullanıldı
+    const user = await User.findOne({ email: req.user.email })
+    const harcamalar = await Maas3.find({ user: user._id })
     res.status(200).json(harcamalar)
   } catch (err) {
     res.status(500).send({ message: err.message })
@@ -61,7 +60,6 @@ router.delete("/:id", async (req, res) => {
       return res.status(404).json({ message: "Harcama bulunamadı" })
     }
 
-    console.log("Harcama silindi:", harcama)
     res.status(204).end()
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -77,14 +75,13 @@ router.put("/:id", async (req, res) => {
     const updatedHarcama = await Maas3.findByIdAndUpdate(
       id,
       { aciklama, kullanim, miktar },
-      { new: true } // Bu, güncellenmiş veriyi geri döndürür
+      { new: true }
     )
 
     if (!updatedHarcama) {
       return res.status(404).json({ message: "Harcama düzenlenemedi" })
     }
 
-    console.log("Harcama düzenlendi:", updatedHarcama)
     res.json(updatedHarcama)
   } catch (error) {
     res.status(500).json({ message: error.message })
